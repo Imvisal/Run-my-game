@@ -1,0 +1,51 @@
+[
+  {
+    "id": 1,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GeForce GTX 960",
+    "vram": 2,
+    "series": "GTX 900"
+  },
+  {
+    "id": 2,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GeForce GTX 1060",
+    "vram": 6,
+    "series": "GTX 1000"
+  },
+  {
+    "id": 3,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GeForce GTX 1650",
+    "vram": 4,
+    "series": "GTX 1600"
+  },
+  {
+    "id": 4,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GeForce RTX 3060",
+    "vram": 12,
+    "series": "RTX 3000"
+  },
+  {
+    "id": 5,
+    "brand": "AMD",
+    "name": "AMD Radeon RX 580",
+    "vram": 8,
+    "series": "RX 500"
+  },
+  {
+    "id": 6,
+    "brand": "AMD",
+    "name": "AMD Radeon RX 6600",
+    "vram": 8,
+    "series": "RX 6000"
+  },
+  {
+    "id": 7,
+    "brand": "Intel",
+    "name": "Intel Arc A750",
+    "vram": 8,
+    "series": "Arc"
+  }
+]
