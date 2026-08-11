@@ -1,2030 +1,1847 @@
-/* =========================================
-   RUNMYGAME - SCRIPT.JS
-   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-let games = [];
-let cpus = [];
-let gpus = [];
 
-let selectedGame = null;
-let selectedCPU = null;
-let selectedGPU = null;
+:root {
 
+    --bg: #07080d;
+    --bg2: #0d0f16;
 
-/* =========================================
-   DOM ELEMENTS
-   ========================================= */
+    --card: #12151e;
+    --card2: #181b25;
 
-const cpuSearch = document.getElementById("cpuSearch");
-const gpuSearch = document.getElementById("gpuSearch");
-const gameSearch = document.getElementById("gameSearch");
+    --border: #272b38;
 
-const cpuSuggestions = document.getElementById("cpuSuggestions");
-const gpuSuggestions = document.getElementById("gpuSuggestions");
-const gameSuggestions = document.getElementById("gameSuggestions");
+    --text: #f5f6fa;
+    --muted: #8d95a7;
 
-const selectedGameBox = document.getElementById("selectedGame");
+    --purple: #7657ff;
+    --purple2: #a28cff;
 
-const gamesGrid = document.getElementById("gamesGrid");
-const libraryInput = document.getElementById("libraryInput");
+    --green: #36d98a;
+    --yellow: #ffc857;
+    --red: #ff526c;
 
-const checkBtn = document.getElementById("checkBtn");
-const savePC = document.getElementById("savePC");
+}
 
-const ram = document.getElementById("ram");
-const vram = document.getElementById("vram");
 
-const result = document.getElementById("result");
-const comparison = document.getElementById("comparison");
-const comparisonRows = document.getElementById("comparisonRows");
+html {
+    scroll-behavior: smooth;
+}
 
-const modal = document.getElementById("modal");
-const modalBg = document.getElementById("modalBg");
-const closeModal = document.getElementById("closeModal");
-const modalCheck = document.getElementById("modalCheck");
 
-const themeBtn = document.getElementById("themeBtn");
-const menuBtn = document.getElementById("menuBtn");
-const nav = document.getElementById("nav");
+body {
 
+    font-family: "Inter", sans-serif;
 
-/* =========================================
-   LOAD ALL DATABASE FILES
-   ========================================= */
+    background: var(--bg);
 
-async function loadDatabase() {
+    color: var(--text);
 
-    try {
+    line-height: 1.5;
 
-        console.log("Loading RunMyGame database...");
+    overflow-x: hidden;
 
+}
 
-        const [gamesResponse, cpusResponse, gpusResponse] =
-            await Promise.all([
 
-                fetch("./data/games.json"),
+body.light {
 
-                fetch("./data/cpus.json"),
+    --bg: #f4f5f8;
+    --bg2: #ffffff;
 
-                fetch("./data/gpus.json")
+    --card: #ffffff;
+    --card2: #f0f1f5;
 
-            ]);
+    --border: #dedfe5;
 
+    --text: #17181d;
+    --muted: #626977;
 
-        if (!gamesResponse.ok) {
-            throw new Error(
-                "games.json failed to load"
-            );
-        }
+}
 
 
-        if (!cpusResponse.ok) {
-            throw new Error(
-                "cpus.json failed to load"
-            );
-        }
+body.modal-open {
+    overflow: hidden;
+}
 
 
-        if (!gpusResponse.ok) {
-            throw new Error(
-                "gpus.json failed to load"
-            );
-        }
+a {
+    text-decoration: none;
+    color: inherit;
+}
 
 
-        games = await gamesResponse.json();
-        cpus = await cpusResponse.json();
-        gpus = await gpusResponse.json();
+button,
+input,
+select {
+    font-family: inherit;
+}
 
 
-        /*
-         * Make sure the returned data is an array.
-         */
+button {
+    cursor: pointer;
+}
 
-        if (!Array.isArray(games)) {
-            throw new Error(
-                "games.json is not an array"
-            );
-        }
 
+.container {
 
-        if (!Array.isArray(cpus)) {
-            throw new Error(
-                "cpus.json is not an array"
-            );
-        }
+    width: min(1150px, 92%);
 
+    margin: auto;
 
-        if (!Array.isArray(gpus)) {
-            throw new Error(
-                "gpus.json is not an array"
-            );
-        }
+}
 
 
-        console.log(
-            "Games loaded:",
-            games.length
-        );
+.hidden {
+    display: none !important;
+}
 
-        console.log(
-            "CPUs loaded:",
-            cpus.length
-        );
 
-        console.log(
-            "GPUs loaded:",
-            gpus.length
-        );
 
+/* ================= NAVBAR ================= */
 
-        /*
-         * IMPORTANT:
-         * Search setup happens AFTER
-         * JSON data has loaded.
-         */
+.navbar {
 
-        setupSearch(
-            cpuSearch,
-            cpuSuggestions,
-            cpus,
-            "cpu"
-        );
+    position: fixed;
 
+    top: 0;
+    left: 0;
+    right: 0;
 
-        setupSearch(
-            gpuSearch,
-            gpuSuggestions,
-            gpus,
-            "gpu"
-        );
+    height: 70px;
 
+    z-index: 1000;
 
-        setupSearch(
-            gameSearch,
-            gameSuggestions,
-            games,
-            "game"
-        );
+    background: rgba(7, 8, 13, .85);
 
+    backdrop-filter: blur(18px);
 
-        /*
-         * Render games
-         */
+    border-bottom: 1px solid rgba(255,255,255,.06);
 
-        renderGames(games);
+}
 
 
-        /*
-         * Everything loaded successfully
-         */
+.light .navbar {
 
-        console.log(
-            "RunMyGame database ready!"
-        );
+    background: rgba(255,255,255,.9);
 
+    border-color: var(--border);
 
-    } catch (error) {
+}
 
-        console.error(
-            "DATABASE ERROR:",
-            error
-        );
 
+.nav-container {
 
-        gamesGrid.innerHTML = `
+    width: min(1150px, 92%);
 
-            <div class="empty">
+    height: 100%;
 
-                <i class="fa-solid fa-triangle-exclamation"></i>
+    margin: auto;
 
-                <p>
-                    Database could not be loaded.
-                </p>
+    display: flex;
 
-            </div>
+    align-items: center;
 
-        `;
+}
+
+
+.logo {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    font-size: 18px;
+
+    font-weight: 900;
+
+}
+
+
+.logo-icon {
+
+    width: 37px;
+    height: 37px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 10px;
+
+    background: var(--purple);
+
+    color: white;
+
+}
+
+
+.purple {
+    color: var(--purple2);
+}
+
+
+nav {
+
+    margin-left: auto;
+
+    display: flex;
+
+    gap: 28px;
+
+}
+
+
+nav a {
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+}
+
+
+nav a:hover {
+    color: var(--text);
+}
+
+
+.nav-actions {
+
+    display: flex;
+
+    gap: 8px;
+
+    margin-left: 25px;
+
+}
+
+
+.nav-actions button {
+
+    width: 38px;
+    height: 38px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    background: var(--card);
+
+    color: var(--text);
+
+}
+
+
+#menuBtn {
+    display: none;
+}
+
+
+
+/* ================= HERO ================= */
+
+.hero {
+
+    min-height: 100vh;
+
+    padding: 140px 0 80px;
+
+    display: flex;
+
+    align-items: center;
+
+}
+
+
+.hero-grid {
+
+    display: grid;
+
+    grid-template-columns: 1.1fr .9fr;
+
+    gap: 70px;
+
+    align-items: center;
+
+}
+
+
+.badge {
+
+    display: inline-flex;
+
+    gap: 7px;
+
+    color: var(--purple2);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.hero h1 {
+
+    margin-top: 20px;
+
+    font-size: clamp(48px, 7vw, 78px);
+
+    line-height: .98;
+
+    letter-spacing: -5px;
+
+    font-weight: 900;
+
+}
+
+
+.hero h1 span {
+
+    display: block;
+
+    color: var(--purple2);
+
+}
+
+
+.hero-text > p {
+
+    max-width: 580px;
+
+    margin-top: 25px;
+
+    color: var(--muted);
+
+    font-size: 14px;
+
+}
+
+
+.hero-buttons {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 30px;
+
+}
+
+
+.btn {
+
+    height: 48px;
+
+    padding: 0 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    border-radius: 10px;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+}
+
+
+.primary {
+
+    background: var(--purple);
+
+    color: white;
+
+}
+
+
+.secondary {
+
+    border: 1px solid var(--border);
+
+    background: var(--card);
+
+}
+
+
+.btn:hover {
+
+    transform: translateY(-2px);
+
+}
+
+
+
+/* ================= PC CARD ================= */
+
+.pc-card {
+
+    padding: 25px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 20px;
+
+    background: var(--card);
+
+    box-shadow: 0 25px 70px rgba(0,0,0,.3);
+
+}
+
+
+.pc-card-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid var(--border);
+
+}
+
+
+.pc-card-header small {
+
+    color: var(--purple2);
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.3px;
+
+}
+
+
+.pc-card-header h3 {
+
+    margin-top: 5px;
+
+    font-size: 17px;
+
+}
+
+
+.online-dot {
+
+    width: 9px;
+    height: 9px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    box-shadow: 0 0 15px var(--green);
+
+}
+
+
+.pc-specs {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+
+    margin-top: 20px;
+
+}
+
+
+.pc-spec {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 13px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    background: rgba(255,255,255,.02);
+
+}
+
+
+.pc-spec > i {
+
+    width: 34px;
+    height: 34px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 9px;
+
+    color: var(--purple2);
+
+    background: rgba(118,87,255,.1);
+
+}
+
+
+.pc-spec small {
+
+    display: block;
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+}
+
+
+.pc-spec strong {
+
+    display: block;
+
+    max-width: 120px;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+    font-size: 10px;
+
+}
+
+
+
+/* ================= SECTION ================= */
+
+.section {
+
+    padding: 100px 0;
+
+}
+
+
+.checker-section {
+
+    background: var(--bg2);
+
+}
+
+
+.section-heading {
+
+    text-align: center;
+
+    margin-bottom: 40px;
+
+}
+
+
+.section-heading span {
+
+    color: var(--purple2);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.section-heading h2 {
+
+    margin-top: 7px;
+
+    font-size: 40px;
+
+    letter-spacing: -2px;
+
+}
+
+
+.section-heading p {
+
+    margin-top: 9px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+}
+
+
+
+/* ================= CHECKER ================= */
+
+.checker-grid {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+
+}
+
+
+.card {
+
+    padding: 25px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    background: var(--card);
+
+}
+
+
+.card-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding-bottom: 18px;
+
+    margin-bottom: 20px;
+
+    border-bottom: 1px solid var(--border);
+
+}
+
+
+.card-header small {
+
+    color: var(--purple2);
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.3px;
+
+}
+
+
+.card-header h3 {
+
+    font-size: 18px;
+
+}
+
+
+.card-header > i {
+
+    color: var(--purple2);
+
+    font-size: 22px;
+
+}
+
+
+label {
+
+    display: block;
+
+    margin: 14px 0 7px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+}
+
+
+label i {
+
+    color: var(--purple2);
+
+    margin-right: 5px;
+
+}
+
+
+
+/* ================= SEARCH ================= */
+
+.search-box {
+
+    position: relative;
+
+}
+
+
+.search-box > i {
+
+    position: absolute;
+
+    left: 14px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+}
+
+
+.search-box input {
+
+    width: 100%;
+
+    height: 46px;
+
+    padding: 0 13px 0 38px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 9px;
+
+    outline: none;
+
+    background: var(--bg2);
+
+    color: var(--text);
+
+    font-size: 10px;
+
+}
+
+
+.search-box input:focus {
+
+    border-color: var(--purple);
+
+}
+
+
+.results {
+
+    display: none;
+
+    max-height: 220px;
+
+    overflow-y: auto;
+
+    margin-top: 5px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 9px;
+
+    background: var(--card);
+
+    position: relative;
+
+    z-index: 100;
+
+    box-shadow: 0 20px 50px rgba(0,0,0,.4);
+
+}
+
+
+.results.show {
+    display: block;
+}
+
+
+.result-item {
+
+    padding: 11px 13px;
+
+    border-bottom: 1px solid var(--border);
+
+    font-size: 10px;
+
+    cursor: pointer;
+
+}
+
+
+.result-item:last-child {
+    border-bottom: 0;
+}
+
+
+.result-item:hover {
+
+    background: var(--card2);
+
+    color: var(--purple2);
+
+}
+
+
+.no-result {
+
+    padding: 12px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+}
+
+
+.selected-item {
+
+    margin-top: 7px;
+
+    padding: 9px 11px;
+
+    border-radius: 8px;
+
+    background: rgba(118,87,255,.08);
+
+    border: 1px solid rgba(118,87,255,.2);
+
+    color: var(--purple2);
+
+    font-size: 9px;
+
+}
+
+
+
+/* ================= RAM ================= */
+
+.two-inputs {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 12px;
+
+}
+
+
+select {
+
+    width: 100%;
+
+    height: 44px;
+
+    padding: 0 10px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 8px;
+
+    background: var(--bg2);
+
+    color: var(--text);
+
+    outline: none;
+
+    font-size: 10px;
+
+}
+
+
+
+/* ================= BUTTONS ================= */
+
+.save-btn {
+
+    width: 100%;
+
+    height: 45px;
+
+    margin-top: 20px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 9px;
+
+    background: var(--card2);
+
+    color: var(--text);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+}
+
+
+.check-btn {
+
+    width: 100%;
+
+    height: 48px;
+
+    margin-top: 20px;
+
+    padding: 0 17px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border: 0;
+
+    border-radius: 9px;
+
+    background: var(--purple);
+
+    color: white;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+}
+
+
+.check-btn:hover {
+
+    background: #6547ed;
+
+}
+
+
+
+/* ================= GAME SELECTED ================= */
+
+.game-selected {
+
+    min-height: 190px;
+
+    margin-top: 15px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    background: var(--bg2);
+
+}
+
+
+.empty-game {
+
+    min-height: 190px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    color: var(--muted);
+
+}
+
+
+.empty-game i {
+
+    color: var(--purple2);
+
+    font-size: 28px;
+
+}
+
+
+.empty-game p {
+
+    font-size: 9px;
+
+}
+
+
+.selected-game-content {
+
+    display: flex;
+
+    gap: 15px;
+
+    padding: 12px;
+
+}
+
+
+.selected-game-content img {
+
+    width: 120px;
+
+    height: 160px;
+
+    object-fit: cover;
+
+    border-radius: 9px;
+
+}
+
+
+.selected-game-info h3 {
+
+    font-size: 14px;
+
+}
+
+
+.selected-game-info p {
+
+    margin-top: 6px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+}
+
+
+
+/* ================= RESULT ================= */
+
+.result {
+
+    display: grid;
+
+    grid-template-columns: auto 1fr auto;
+
+    align-items: center;
+
+    gap: 18px;
+
+    margin-top: 20px;
+
+    padding: 22px;
+
+    border: 1px solid var(--green);
+
+    border-radius: 16px;
+
+    background: rgba(54,217,138,.05);
+
+}
+
+
+.result.playable {
+
+    border-color: var(--yellow);
+
+    background: rgba(255,200,87,.05);
+
+}
+
+
+.result.bad {
+
+    border-color: var(--red);
+
+    background: rgba(255,82,108,.05);
+
+}
+
+
+.result-icon {
+
+    width: 50px;
+    height: 50px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 13px;
+
+    background: rgba(54,217,138,.1);
+
+    color: var(--green);
+
+}
+
+
+.result.playable .result-icon {
+
+    color: var(--yellow);
+
+    background: rgba(255,200,87,.1);
+
+}
+
+
+.result.bad .result-icon {
+
+    color: var(--red);
+
+    background: rgba(255,82,108,.1);
+
+}
+
+
+.result-text small {
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+}
+
+
+.result-text h2 {
+
+    font-size: 18px;
+
+}
+
+
+.result-text p {
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+}
+
+
+.fps-box {
+
+    text-align: center;
+
+    padding-left: 25px;
+
+    border-left: 1px solid var(--border);
+
+}
+
+
+.fps-box small {
+
+    display: block;
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+}
+
+
+.fps-box strong {
+
+    color: var(--green);
+
+    font-size: 34px;
+
+}
+
+
+.fps-box span {
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+}
+
+
+
+/* ================= COMPARISON ================= */
+
+.requirements-box {
+
+    margin-top: 20px;
+
+    padding: 22px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    background: var(--card);
+
+}
+
+
+.requirements-box h3 {
+
+    margin-bottom: 15px;
+
+    font-size: 15px;
+
+}
+
+
+.requirement-row {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr 1fr;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid var(--border);
+
+    font-size: 9px;
+
+}
+
+
+.requirement-row span {
+
+    color: var(--muted);
+
+}
+
+
+.pass {
+    color: var(--green) !important;
+}
+
+
+.fail {
+    color: var(--red) !important;
+}
+
+
+
+/* ================= GAMES ================= */
+
+.games-section {
+
+    background: var(--bg);
+
+}
+
+
+.library-search {
+
+    max-width: 650px;
+
+    margin: 0 auto 30px;
+
+    position: relative;
+
+}
+
+
+.library-search i {
+
+    position: absolute;
+
+    left: 15px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: var(--muted);
+
+}
+
+
+.library-search input {
+
+    width: 100%;
+
+    height: 50px;
+
+    padding: 0 15px 0 40px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    outline: none;
+
+    background: var(--card);
+
+    color: var(--text);
+
+    font-size: 10px;
+
+}
+
+
+.games-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 16px;
+
+}
+
+
+.game-card {
+
+    overflow: hidden;
+
+    border: 1px solid var(--border);
+
+    border-radius: 15px;
+
+    background: var(--card);
+
+    transition: .25s;
+
+}
+
+
+.game-card:hover {
+
+    transform: translateY(-5px);
+
+    border-color: var(--purple);
+
+}
+
+
+.game-card img {
+
+    width: 100%;
+
+    height: 180px;
+
+    object-fit: cover;
+
+    display: block;
+
+}
+
+
+.game-card-content {
+
+    padding: 14px;
+
+}
+
+
+.game-card h3 {
+
+    font-size: 12px;
+
+}
+
+
+.game-card p {
+
+    margin-top: 4px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+}
+
+
+.game-card button {
+
+    width: 100%;
+
+    height: 35px;
+
+    margin-top: 12px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: var(--text);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+}
+
+
+.game-card button:hover {
+
+    border-color: var(--purple);
+
+    color: var(--purple2);
+
+}
+
+
+
+/* ================= MODAL ================= */
+
+.modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 3000;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+}
+
+
+.modal-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    background: rgba(0,0,0,.8);
+
+    backdrop-filter: blur(7px);
+
+}
+
+
+.modal-card {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: min(700px, 100%);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    background: var(--card);
+
+}
+
+
+.close-modal {
+
+    position: absolute;
+
+    right: 12px;
+
+    top: 12px;
+
+    z-index: 3;
+
+    width: 38px;
+    height: 38px;
+
+    border: 0;
+
+    border-radius: 9px;
+
+    background: rgba(0,0,0,.65);
+
+    color: white;
+
+}
+
+
+.modal-card > img {
+
+    width: 100%;
+
+    height: 230px;
+
+    object-fit: cover;
+
+}
+
+
+.modal-body {
+
+    padding: 25px;
+
+}
+
+
+.modal-body > span {
+
+    color: var(--purple2);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+}
+
+
+.modal-body h2 {
+
+    margin-top: 5px;
+
+    font-size: 28px;
+
+}
+
+
+.requirement-grid {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 12px;
+
+    margin-top: 20px;
+
+}
+
+
+.requirement-grid > div {
+
+    padding: 16px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    background: var(--bg2);
+
+}
+
+
+.requirement-grid h4 {
+
+    font-size: 10px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.requirement-grid h4 i {
+
+    color: var(--purple2);
+
+}
+
+
+.requirement-grid p {
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    line-height: 1.8;
+
+}
+
+
+.modal-check {
+
+    width: 100%;
+
+    height: 45px;
+
+    margin-top: 18px;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background: var(--purple);
+
+    color: white;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+}
+
+
+
+/* ================= FOOTER ================= */
+
+footer {
+
+    padding: 28px 0;
+
+    border-top: 1px solid var(--border);
+
+}
+
+
+.footer-content {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+}
+
+
+.footer-logo {
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+}
+
+
+.footer-logo i {
+
+    color: var(--purple2);
+
+    margin-right: 6px;
+
+}
+
+
+footer p {
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+}
+
+
+
+/* ================= MOBILE ================= */
+
+@media(max-width: 900px) {
+
+    .hero-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .hero-text {
+
+        text-align: center;
+
+    }
+
+
+    .hero-text > p {
+
+        margin-left: auto;
+        margin-right: auto;
+
+    }
+
+
+    .hero-buttons {
+
+        justify-content: center;
+
+    }
+
+
+    .checker-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .games-grid {
+
+        grid-template-columns: repeat(2, 1fr);
 
     }
 
 }
 
 
-/* =========================================
-   SEARCH SYSTEM
-   ========================================= */
+@media(max-width: 700px) {
 
-function setupSearch(
-    input,
-    suggestionsBox,
-    data,
-    type
-) {
+    #menuBtn {
 
-    if (!input || !suggestionsBox) {
-
-        console.error(
-            "Search element missing:",
-            type
-        );
-
-        return;
+        display: block;
 
     }
 
 
-    /*
-     * Remove old listeners by cloning input.
-     * This prevents duplicate searches.
-     */
+    nav {
 
-    const newInput = input.cloneNode(true);
+        display: none;
 
-    input.parentNode.replaceChild(
-        newInput,
-        input
-    );
+        position: absolute;
 
+        top: 65px;
 
-    /*
-     * Update references
-     */
+        left: 4%;
 
-    if (type === "cpu") {
-        window.cpuSearchElement = newInput;
-    }
+        right: 4%;
 
-    if (type === "gpu") {
-        window.gpuSearchElement = newInput;
-    }
+        flex-direction: column;
 
-    if (type === "game") {
-        window.gameSearchElement = newInput;
-    }
+        gap: 0;
 
+        padding: 8px;
 
-    newInput.addEventListener(
-        "input",
-        function () {
+        border: 1px solid var(--border);
 
-            const query =
-                this.value
-                    .trim()
-                    .toLowerCase();
+        border-radius: 10px;
 
-
-            suggestionsBox.innerHTML = "";
-
-
-            /*
-             * Empty search
-             */
-
-            if (!query) {
-
-                suggestionsBox.classList.remove(
-                    "active"
-                );
-
-                return;
-
-            }
-
-
-            /*
-             * Search by name.
-             */
-
-            const matches =
-                data.filter(item => {
-
-                    if (!item.name) {
-                        return false;
-                    }
-
-                    return item.name
-                        .toLowerCase()
-                        .includes(query);
-
-                });
-
-
-            /*
-             * Maximum 10 suggestions
-             */
-
-            const results =
-                matches.slice(0, 10);
-
-
-            /*
-             * No results
-             */
-
-            if (!results.length) {
-
-                suggestionsBox.innerHTML = `
-
-                    <div class="suggestion">
-                        No results found
-                    </div>
-
-                `;
-
-                suggestionsBox.classList.add(
-                    "active"
-                );
-
-                return;
-
-            }
-
-
-            /*
-             * Create suggestions
-             */
-
-            results.forEach(item => {
-
-                const suggestion =
-                    document.createElement("div");
-
-
-                suggestion.className =
-                    "suggestion";
-
-
-                suggestion.textContent =
-                    item.name;
-
-
-                suggestion.addEventListener(
-                    "click",
-                    function () {
-
-                        newInput.value =
-                            item.name;
-
-
-                        suggestionsBox.classList.remove(
-                            "active"
-                        );
-
-
-                        /*
-                         * CPU selected
-                         */
-
-                        if (type === "cpu") {
-
-                            selectedCPU =
-                                item;
-
-                            updateHero();
-
-                        }
-
-
-                        /*
-                         * GPU selected
-                         */
-
-                        if (type === "gpu") {
-
-                            selectedGPU =
-                                item;
-
-                            updateHero();
-
-                        }
-
-
-                        /*
-                         * Game selected
-                         */
-
-                        if (type === "game") {
-
-                            selectGame(item);
-
-                        }
-
-                    }
-                );
-
-
-                suggestionsBox.appendChild(
-                    suggestion
-                );
-
-            });
-
-
-            suggestionsBox.classList.add(
-                "active"
-            );
-
-        }
-    );
-
-
-    /*
-     * Close suggestions when clicking outside.
-     */
-
-    document.addEventListener(
-        "click",
-        function (event) {
-
-            if (
-                !newInput.contains(event.target) &&
-                !suggestionsBox.contains(event.target)
-            ) {
-
-                suggestionsBox.classList.remove(
-                    "active"
-                );
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================
-   SELECT GAME
-   ========================================= */
-
-function selectGame(game) {
-
-    selectedGame = game;
-
-
-    const image =
-        game.image || "";
-
-
-    selectedGameBox.innerHTML = `
-
-        <div class="selected-game-content">
-
-            <img
-                src="${image}"
-                alt="${escapeHTML(game.name)}"
-                loading="lazy"
-                onerror="this.style.display='none'"
-            >
-
-            <div>
-
-                <h3>
-                    ${escapeHTML(game.name)}
-                </h3>
-
-                <p>
-                    ${game.year || ""}
-                    ${game.genre ? " • " + escapeHTML(game.genre) : ""}
-                </p>
-
-                <p>
-                    Game selected.
-                    Click CHECK MY PC below.
-                </p>
-
-            </div>
-
-        </div>
-
-    `;
-
-
-    updateHero();
-
-}
-
-
-/* =========================================
-   UPDATE HERO
-   ========================================= */
-
-function updateHero() {
-
-    const heroPcName =
-        document.getElementById("heroPcName");
-
-    const heroCpu =
-        document.getElementById("heroCpu");
-
-    const heroGpu =
-        document.getElementById("heroGpu");
-
-    const heroRam =
-        document.getElementById("heroRam");
-
-    const heroVram =
-        document.getElementById("heroVram");
-
-
-    if (heroPcName) {
-
-        heroPcName.textContent =
-            selectedCPU && selectedGPU
-                ? "Gaming PC"
-                : "Not configured";
+        background: var(--card);
 
     }
 
 
-    if (heroCpu) {
+    nav.active {
 
-        heroCpu.textContent =
-            selectedCPU
-                ? selectedCPU.name
-                : "Not set";
+        display: flex;
 
     }
 
 
-    if (heroGpu) {
+    nav a {
 
-        heroGpu.textContent =
-            selectedGPU
-                ? selectedGPU.name
-                : "Not set";
+        padding: 13px;
 
     }
 
 
-    if (heroRam) {
+    .result {
 
-        heroRam.textContent =
-            `${ram.value} GB`;
+        grid-template-columns: auto 1fr;
 
     }
 
 
-    if (heroVram) {
+    .fps-box {
 
-        heroVram.textContent =
-            `${vram.value} GB`;
+        grid-column: 1 / -1;
+
+        padding: 15px 0 0;
+
+        border-left: 0;
+
+        border-top: 1px solid var(--border);
 
     }
 
 }
 
 
-/* =========================================
-   RAM / VRAM CHANGE
-   ========================================= */
+@media(max-width: 520px) {
 
-if (ram) {
+    .hero {
 
-    ram.addEventListener(
-        "change",
-        updateHero
-    );
+        padding-top: 120px;
 
-}
-
-
-if (vram) {
-
-    vram.addEventListener(
-        "change",
-        updateHero
-    );
-
-}
-
-
-/* =========================================
-   SAVE PC
-   ========================================= */
-
-if (savePC) {
-
-    savePC.addEventListener(
-        "click",
-        function () {
-
-            if (!selectedCPU) {
-
-                alert(
-                    "Please select your CPU first."
-                );
-
-                return;
-
-            }
-
-
-            if (!selectedGPU) {
-
-                alert(
-                    "Please select your GPU first."
-                );
-
-                return;
-
-            }
-
-
-            const pc = {
-
-                cpu: selectedCPU,
-
-                gpu: selectedGPU,
-
-                ram: Number(ram.value),
-
-                vram: Number(vram.value)
-
-            };
-
-
-            localStorage.setItem(
-                "runmygamePC",
-                JSON.stringify(pc)
-            );
-
-
-            updateHero();
-
-
-            alert(
-                "Your PC has been saved!"
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================
-   LOAD SAVED PC
-   ========================================= */
-
-function loadSavedPC() {
-
-    const saved =
-        localStorage.getItem(
-            "runmygamePC"
-        );
-
-
-    if (!saved) {
-        return;
     }
 
 
-    try {
+    .hero h1 {
 
-        const pc =
-            JSON.parse(saved);
+        font-size: 45px;
 
+        letter-spacing: -3px;
 
-        if (pc.cpu) {
-
-            selectedCPU =
-                pc.cpu;
-
-        }
+    }
 
 
-        if (pc.gpu) {
+    .hero-buttons {
 
-            selectedGPU =
-                pc.gpu;
+        flex-direction: column;
 
-        }
-
-
-        if (pc.ram) {
-
-            ram.value =
-                pc.ram;
-
-        }
+    }
 
 
-        if (pc.vram) {
+    .btn {
 
-            vram.value =
-                pc.vram;
+        width: 100%;
 
-        }
-
-
-        /*
-         * Search inputs may have been
-         * replaced by setupSearch.
-         */
-
-        if (window.cpuSearchElement && selectedCPU) {
-
-            window.cpuSearchElement.value =
-                selectedCPU.name;
-
-        }
+    }
 
 
-        if (window.gpuSearchElement && selectedGPU) {
+    .pc-specs {
 
-            window.gpuSearchElement.value =
-                selectedGPU.name;
+        grid-template-columns: 1fr;
 
-        }
-
-
-        updateHero();
+    }
 
 
-    } catch (error) {
+    .games-grid {
 
-        console.error(
-            "Saved PC error:",
-            error
-        );
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .two-inputs {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .requirement-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .selected-game-content img {
+
+        width: 100px;
+
+        height: 140px;
+
+    }
+
+
+    .footer-content {
+
+        flex-direction: column;
+
+        gap: 10px;
 
     }
 
 }
-
-
-/* =========================================
-   CHECK BUTTON
-   ========================================= */
-
-if (checkBtn) {
-
-    checkBtn.addEventListener(
-        "click",
-        function () {
-
-            if (!selectedGame) {
-
-                alert(
-                    "Please select a game first."
-                );
-
-                return;
-
-            }
-
-
-            if (!selectedCPU) {
-
-                alert(
-                    "Please select your CPU."
-                );
-
-                return;
-
-            }
-
-
-            if (!selectedGPU) {
-
-                alert(
-                    "Please select your GPU."
-                );
-
-                return;
-
-            }
-
-
-            checkPerformance();
-
-        }
-    );
-
-}
-
-
-/* =========================================
-   PERFORMANCE CHECK
-   ========================================= */
-
-function checkPerformance() {
-
-    const minimum =
-        selectedGame.minimum || {};
-
-    const recommended =
-        selectedGame.recommended || {};
-
-
-    const userRAM =
-        Number(ram.value);
-
-
-    const userVRAM =
-        Number(vram.value);
-
-
-    /*
-     * CPU
-     */
-
-    const cpuScore =
-        compareCPU(
-            selectedCPU,
-            minimum.cpu,
-            recommended.cpu
-        );
-
-
-    /*
-     * GPU
-     */
-
-    const gpuScore =
-        compareGPU(
-            selectedGPU,
-            minimum.gpu,
-            recommended.gpu
-        );
-
-
-    /*
-     * RAM
-     */
-
-    const minimumRAM =
-        Number(minimum.ram || 4);
-
-
-    const recommendedRAM =
-        Number(recommended.ram || minimumRAM);
-
-
-    const ramScore =
-        getMemoryScore(
-            userRAM,
-            minimumRAM,
-            recommendedRAM
-        );
-
-
-    /*
-     * VRAM
-     */
-
-    const minimumVRAM =
-        Number(minimum.vram || 1);
-
-
-    const recommendedVRAM =
-        Number(recommended.vram || minimumVRAM);
-
-
-    const vramScore =
-        getMemoryScore(
-            userVRAM,
-            minimumVRAM,
-            recommendedVRAM
-        );
-
-
-    /*
-     * Overall score
-     */
-
-    const score =
-        (
-            cpuScore * 0.30 +
-            gpuScore * 0.40 +
-            ramScore * 0.20 +
-            vramScore * 0.10
-        );
-
-
-    let status;
-
-
-    if (score >= 85) {
-
-        status = "good";
-
-    }
-
-    else if (score >= 65) {
-
-        status = "playable";
-
-    }
-
-    else {
-
-        status = "danger";
-
-    }
-
-
-    showResult(
-        status,
-        score,
-        cpuScore,
-        gpuScore,
-        ramScore,
-        vramScore
-    );
-
-}
-
-
-/* =========================================
-   MEMORY SCORE
-   ========================================= */
-
-function getMemoryScore(
-    user,
-    minimum,
-    recommended
-) {
-
-    if (user >= recommended) {
-
-        return 100;
-
-    }
-
-
-    if (user >= minimum) {
-
-        return 70;
-
-    }
-
-
-    return 25;
-
-}
-
-
-/* =========================================
-   CPU COMPARISON
-   ========================================= */
-
-function compareCPU(
-    userCPU,
-    minimumCPU,
-    recommendedCPU
-) {
-
-    const userScore =
-        getCPUScore(userCPU);
-
-
-    const minimumScore =
-        findCPUScore(minimumCPU);
-
-
-    const recommendedScore =
-        findCPUScore(recommendedCPU);
-
-
-    /*
-     * If requirements are not
-     * available in database,
-     * don't pretend it's exact.
-     */
-
-    if (
-        minimumScore === null ||
-        recommendedScore === null
-    ) {
-
-        return 70;
-
-    }
-
-
-    if (
-        userScore >= recommendedScore
-    ) {
-
-        return 100;
-
-    }
-
-
-    if (
-        userScore >= minimumScore
-    ) {
-
-        return 70;
-
-    }
-
-
-    return 25;
-
-}
-
-
-/* =========================================
-   GPU COMPARISON
-   ========================================= */
-
-function compareGPU(
-    userGPU,
-    minimumGPU,
-    recommendedGPU
-) {
-
-    const userScore =
-        getGPUScore(userGPU);
-
-
-    const minimumScore =
-        findGPUScore(minimumGPU);
-
-
-    const recommendedScore =
-        findGPUScore(recommendedGPU);
-
-
-    if (
-        minimumScore === null ||
-        recommendedScore === null
-    ) {
-
-        return 70;
-
-    }
-
-
-    if (
-        userScore >= recommendedScore
-    ) {
-
-        return 100;
-
-    }
-
-
-    if (
-        userScore >= minimumScore
-    ) {
-
-        return 70;
-
-    }
-
-
-    return 25;
-
-}
-
-
-/* =========================================
-   CPU SCORE
-   ========================================= */
-
-function getCPUScore(cpu) {
-
-    if (!cpu) {
-        return 0;
-    }
-
-
-    /*
-     * If database has performance score,
-     * use it.
-     */
-
-    if (
-        cpu.performance !== undefined
-    ) {
-
-        return Number(
-            cpu.performance
-        );
-
-    }
-
-
-    /*
-     * Fallback score.
-     */
-
-    const cores =
-        Number(cpu.cores || 2);
-
-
-    const threads =
-        Number(
-            cpu.threads ||
-            cores
-        );
-
-
-    return (
-        cores * 100 +
-        threads * 50
-    );
-
-}
-
-
-/* =========================================
-   GPU SCORE
-   ========================================= */
-
-function getGPUScore(gpu) {
-
-    if (!gpu) {
-        return 0;
-    }
-
-
-    /*
-     * If database has performance score,
-     * use it.
-     */
-
-    if (
-        gpu.performance !== undefined
-    ) {
-
-        return Number(
-            gpu.performance
-        );
-
-    }
-
-
-    /*
-     * Fallback score.
-     */
-
-    const vram =
-        Number(gpu.vram || 1);
-
-
-    return vram * 100;
-
-}
-
-
-/* =========================================
-   FIND CPU SCORE
-   ========================================= */
-
-function findCPUScore(
-    requirement
-) {
-
-    if (!requirement) {
-        return null;
-    }
-
-
-    const required =
-        String(requirement)
-            .toLowerCase()
-            .trim();
-
-
-    /*
-     * Exact match first
-     */
-
-    let found =
-        cpus.find(
-            cpu =>
-                String(cpu.name)
-                    .toLowerCase()
-                    .trim() === required
-        );
-
-
-    /*
-     * Partial match
-     */
-
-    if (!found) {
-
-        found =
-            cpus.find(
-                cpu => {
-
-                    const name =
-                        String(cpu.name)
-                            .toLowerCase();
-
-                    return (
-                        name.includes(required) ||
-                        required.includes(name)
-                    );
-
-                }
-            );
-
-    }
-
-
-    if (!found) {
-        return null;
-    }
-
-
-    return getCPUScore(found);
-
-}
-
-
-/* =========================================
-   FIND GPU SCORE
-   ========================================= */
-
-function findGPUScore(
-    requirement
-) {
-
-    if (!requirement) {
-        return null;
-    }
-
-
-    const required =
-        String(requirement)
-            .toLowerCase()
-            .trim();
-
-
-    /*
-     * Exact match
-     */
-
-    let found =
-        gpus.find(
-            gpu =>
-                String(gpu.name)
-                    .toLowerCase()
-                    .trim() === required
-        );
-
-
-    /*
-     * Partial match
-     */
-
-    if (!found) {
-
-        found =
-            gpus.find(
-                gpu => {
-
-                    const name =
-                        String(gpu.name)
-                            .toLowerCase();
-
-                    return (
-                        name.includes(required) ||
-                        required.includes(name)
-                    );
-
-                }
-            );
-
-    }
-
-
-    if (!found) {
-        return null;
-    }
-
-
-    return getGPUScore(found);
-
-}
-
-
-/* =========================================
-   SHOW RESULT
-   ========================================= */
-
-function showResult(
-    status,
-    score,
-    cpuScore,
-    gpuScore,
-    ramScore,
-    vramScore
-) {
-
-    result.className =
-        "result";
-
-
-    result.classList.add(
-        status
-    );
-
-
-    result.classList.remove(
-        "hidden"
-    );
-
-
-    const resultIcon =
-        document.getElementById(
-            "resultIcon"
-        );
-
-
-    const resultTitle =
-        document.getElementById(
-            "resultTitle"
-        );
-
-
-    const resultText =
-        document.getElementById(
-            "resultText"
-        );
-
-
-    if (status === "good") {
-
-        resultIcon.innerHTML =
-            '<i class="fa-solid fa-circle-check"></i>';
-
-
-        resultTitle.textContent =
-            "Your PC Can Run It";
-
-
-        resultText.textContent =
-            "Your hardware meets or exceeds the available requirements.";
-
-    }
-
-
-    else if (status === "playable") {
-
-        resultIcon.innerHTML =
-            '<i class="fa-solid fa-check"></i>';
-
-
-        resultTitle.textContent =
-            "Likely Playable";
-
-
-        resultText.textContent =
-            "Your PC should run this game, but lower settings may be needed.";
-
-    }
-
-
-    else {
-
-        resultIcon.innerHTML =
-            '<i class="fa-solid fa-xmark"></i>';
-
-
-        resultTitle.textContent =
-            "Not Recommended";
-
-
-        resultText.textContent =
-            "One or more major components are below the minimum requirements.";
-
-    }
-
-
-    /*
-     * Estimated FPS
-     *
-     * This is NOT benchmark data.
-     */
-
-    const fps =
-        calculateFPS(score);
-
-
-    document.getElementById(
-        "fps"
-    ).textContent =
-        fps;
-
-
-    /*
-     * Comparison table
-     */
-
-    comparison.classList.remove(
-        "hidden"
-    );
-
-
-    comparisonRows.innerHTML = `
-
-        ${createCompareRow(
-            "CPU",
-            cpuScore
-        )}
-
-        ${createCompareRow(
-            "GPU",
-            gpuScore
-        )}
-
-        ${createCompareRow(
-            "RAM",
-            ramScore
-        )}
-
-        ${createCompareRow(
-            "VRAM",
-            vramScore
-        )}
-
-    `;
-
-
-    result.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-    });
-
-}
-
-
-/* =========================================
-   COMPARISON ROW
-   ========================================= */
-
-function createCompareRow(
-    name,
-    score
-) {
-
-    const passed =
-        score >= 70;
-
-
-    return `
-
-        <div class="compare-row">
-
-            <span>
-                ${name}
-            </span>
-
-            <strong class="${passed ? "good" : "bad"}">
-
-                ${passed ? "PASS" : "BELOW"}
-
-            </strong>
-
-            <span>
-                ${Math.round(score)}%
-            </span>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================================
-   FPS ESTIMATE
-   ========================================= */
-
-function calculateFPS(score) {
-
-    if (score >= 95) {
-        return 80;
-    }
-
-
-    if (score >= 85) {
-        return 65;
-    }
-
-
-    if (score >= 75) {
-        return 55;
-    }
-
-
-    if (score >= 65) {
-        return 45;
-    }
-
-
-    if (score >= 50) {
-        return 30;
-    }
-
-
-    return 20;
-
-}
-
-
-/* =========================================
-   RENDER GAME LIBRARY
-   ========================================= */
-
-function renderGames(list) {
-
-    gamesGrid.innerHTML = "";
-
-
-    if (!list.length) {
-
-        gamesGrid.innerHTML = `
-
-            <div class="empty">
-
-                <i class="fa-solid fa-gamepad"></i>
-
-                <p>
-                    No games found.
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    list.forEach(game => {
-
-        const card =
-            document.createElement("article");
-
-
-        card.className =
-            "game-card";
-
-
-        card.innerHTML = `
-
-            <img
-                src="${game.image || ""}"
-                alt="${escapeHTML(game.name)}"
-                loading="lazy"
-                onerror="this.style.opacity='0'"
-            >
-
-            <div class="game-card-content">
-
-                <h3>
-                    ${escapeHTML(game.name)}
-                </h3>
-
-                <p>
-                    ${game.year || ""}
-                    ${
-                        game.genre
-                            ? " • " +
-                              escapeHTML(game.genre)
-                            : ""
-                    }
-                </p>
-
-                <button>
-                    View Requirements
-                </button>
-
-            </div>
-
-        `;
-
-
-        const button =
-            card.querySelector("button");
-
-
-        button.addEventListener(
-            "click",
-            function () {
-
-                openGameModal(game);
-
-            }
-        );
-
-
-        gamesGrid.appendChild(
-            card
-        );
-
-    });
-
-}
-
-
-/* =========================================
-   GAME LIBRARY SEARCH
-   ========================================= */
-
-if (libraryInput) {
-
-    libraryInput.addEventListener(
-        "input",
-        function () {
-
-            const query =
-                this.value
-                    .trim()
-                    .toLowerCase();
-
-
-            if (!query) {
-
-                renderGames(
-                    games
-                );
-
-                return;
-
-            }
-
-
-            const filtered =
-                games.filter(
-                    game =>
-                        String(game.name)
-                            .toLowerCase()
-                            .includes(query)
-                );
-
-
-            renderGames(
-                filtered
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================
-   GAME MODAL
-   ========================================= */
-
-function openGameModal(game) {
-
-    selectedGame =
-        game;
-
-
-    const modalImage =
-        document.getElementById(
-            "modalImage"
-        );
-
-
-    const modalTitle =
-        document.getElementById(
-            "modalTitle"
-        );
-
-
-    const modalGenre =
-        document.getElementById(
-            "modalGenre"
-        );
-
-
-    const modalDescription =
-        document.getElementById(
-            "modalDescription"
-        );
-
-
-    const modalMinimum =
-        document.getElementById(
-            "modalMinimum"
-        );
-
-
-    const modalRecommended =
-        document.getElementById(
-            "modalRecommended"
-        );
-
-
-    modalImage.src =
-        game.image || "";
-
-
-    modalImage.alt =
-        game.name;
-
-
-    modalTitle.textContent =
-        game.name;
-
-
-    modalGenre.textContent =
-        `${game.year || ""} • ${game.genre || "PC Game"}`;
-
-
-    modalDescription.textContent =
-        "PC system requirements for this game.";
-
-
-    const minimum =
-        game.minimum || {};
-
-
-    const recommended =
-        game.recommended || {};
-
-
-    modalMinimum.innerHTML = `
-
-        CPU:
-        ${escapeHTML(
-            minimum.cpu || "Not available"
-        )}
-
-        <br>
-
-        GPU:
-        ${escapeHTML(
-            minimum.gpu || "Not available"
-        )}
-
-        <br>
-
-        RAM:
-        ${minimum.ram || "?"} GB
-
-        <br>
-
-        VRAM:
-        ${minimum.vram || "?"} GB
-
-    `;
-
-
-    modalRecommended.innerHTML = `
-
-        CPU:
-        ${escapeHTML(
-            recommended.cpu || "Not available"
-        )}
-
-        <br>
-
-        GPU:
-        ${escapeHTML(
-            recommended.gpu || "Not available"
-        )}
-
-        <br>
-
-        RAM:
-        ${recommended.ram || "?"} GB
-
-        <br>
-
-        VRAM:
-        ${recommended.vram || "?"} GB
-
-    `;
-
-
-    modal.classList.remove(
-        "hidden"
-    );
-
-
-    document.body.classList.add(
-        "modal-open"
-    );
-
-}
-
-
-/* =========================================
-   CLOSE MODAL
-   ========================================= */
-
-function hideModal() {
-
-    modal.classList.add(
-        "hidden"
-    );
-
-
-    document.body.classList.remove(
-        "modal-open"
-    );
-
-}
-
-
-if (closeModal) {
-
-    closeModal.addEventListener(
-        "click",
-        hideModal
-    );
-
-}
-
-
-if (modalBg) {
-
-    modalBg.addEventListener(
-        "click",
-        hideModal
-    );
-
-}
-
-
-if (modalCheck) {
-
-    modalCheck.addEventListener(
-        "click",
-        function () {
-
-            hideModal();
-
-
-            document
-                .getElementById("checker")
-                .scrollIntoView({
-                    behavior: "smooth"
-                });
-
-        }
-    );
-
-}
-
-
-/* =========================================
-   ESC KEY
-   ========================================= */
-
-document.addEventListener(
-    "keydown",
-    function (event) {
-
-        if (
-            event.key === "Escape" &&
-            modal &&
-            !modal.classList.contains("hidden")
-        ) {
-
-            hideModal();
-
-        }
-
-    }
-);
-
-
-/* =========================================
-   THEME
-   ========================================= */
-
-if (themeBtn) {
-
-    themeBtn.addEventListener(
-        "click",
-        function () {
-
-            document.body.classList.toggle(
-                "light"
-            );
-
-
-            const light =
-                document.body.classList.contains(
-                    "light"
-                );
-
-
-            localStorage.setItem(
-                "runmygameTheme",
-                light
-                    ? "light"
-                    : "dark"
-            );
-
-
-            themeBtn.innerHTML =
-                light
-                    ? '<i class="fa-solid fa-sun"></i>'
-                    : '<i class="fa-solid fa-moon"></i>';
-
-        }
-    );
-
-}
-
-
-/* =========================================
-   MOBILE MENU
-   ========================================= */
-
-if (menuBtn && nav) {
-
-    menuBtn.addEventListener(
-        "click",
-        function () {
-
-            nav.classList.toggle(
-                "active"
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================
-   ESCAPE HTML
-   ========================================= */
-
-function escapeHTML(value) {
-
-    return String(value)
-
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
-
-}
-
-
-/* =========================================
-   THEME ON START
-   ========================================= */
-
-const savedTheme =
-    localStorage.getItem(
-        "runmygameTheme"
-    );
-
-
-if (savedTheme === "light") {
-
-    document.body.classList.add(
-        "light"
-    );
-
-
-    if (themeBtn) {
-
-        themeBtn.innerHTML =
-            '<i class="fa-solid fa-sun"></i>';
-
-    }
-
-}
-
-
-/* =========================================
-   START APPLICATION
-   ========================================= */
-
-loadDatabase();
-
-loadSavedPC();
-
-updateHero();
