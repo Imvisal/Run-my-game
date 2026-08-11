@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "name": "Grand Theft Auto V",
+    "year": 2015,
+    "genre": "Action",
+    "image": "images/games/gta-v.jpg",
+    "minimum": {
+      "cpu": "Intel Core 2 Quad Q6600",
+      "gpu": "NVIDIA 9800 GT",
+      "ram": 4,
+      "vram": 1,
+      "storage": 72
+    },
+    "recommended": {
+      "cpu": "Intel Core i5-3470",
+      "gpu": "NVIDIA GTX 660",
+      "ram": 8,
+      "vram": 2,
+      "storage": 72
+    }
+  },
+  {
+    "id": 2,
+    "name": "Red Dead Redemption 2",
+    "year": 2019,
+    "genre": "Action",
+    "image": "images/games/rdr2.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-2500K",
+      "gpu": "NVIDIA GTX 770",
+      "ram": 8,
+      "vram": 2,
+      "storage": 150
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-4770K",
+      "gpu": "NVIDIA GTX 1060 6GB",
+      "ram": 12,
+      "vram": 6,
+      "storage": 150
+    }
+  }
+]
