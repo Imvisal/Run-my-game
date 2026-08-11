@@ -1,1335 +1,2030 @@
-:root {
-    --bg: #07080d;
-    --bg2: #0c0e15;
-    --card: #11141d;
-    --card2: #171a24;
+/* =========================================
+   RUNMYGAME - SCRIPT.JS
+   ========================================= */
 
-    --border: #262b38;
+let games = [];
+let cpus = [];
+let gpus = [];
 
-    --text: #f6f7fb;
-    --muted: #8c94a5;
+let selectedGame = null;
+let selectedCPU = null;
+let selectedGPU = null;
 
-    --primary: #7657ff;
-    --primary-light: #a28dff;
 
-    --green: #39d982;
-    --yellow: #ffc25b;
-    --red: #ff5570;
+/* =========================================
+   DOM ELEMENTS
+   ========================================= */
 
-    --radius: 18px;
-}
+const cpuSearch = document.getElementById("cpuSearch");
+const gpuSearch = document.getElementById("gpuSearch");
+const gameSearch = document.getElementById("gameSearch");
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+const cpuSuggestions = document.getElementById("cpuSuggestions");
+const gpuSuggestions = document.getElementById("gpuSuggestions");
+const gameSuggestions = document.getElementById("gameSuggestions");
 
-html {
-    scroll-behavior: smooth;
-}
+const selectedGameBox = document.getElementById("selectedGame");
 
-body {
-    font-family: "Inter", sans-serif;
+const gamesGrid = document.getElementById("gamesGrid");
+const libraryInput = document.getElementById("libraryInput");
 
-    background: var(--bg);
-    color: var(--text);
+const checkBtn = document.getElementById("checkBtn");
+const savePC = document.getElementById("savePC");
 
-    line-height: 1.5;
+const ram = document.getElementById("ram");
+const vram = document.getElementById("vram");
 
-    overflow-x: hidden;
-}
+const result = document.getElementById("result");
+const comparison = document.getElementById("comparison");
+const comparisonRows = document.getElementById("comparisonRows");
 
-body.light {
-    --bg: #f4f5f8;
-    --bg2: #ffffff;
-    --card: #ffffff;
-    --card2: #f0f1f5;
-    --border: #e0e3ea;
+const modal = document.getElementById("modal");
+const modalBg = document.getElementById("modalBg");
+const closeModal = document.getElementById("closeModal");
+const modalCheck = document.getElementById("modalCheck");
 
-    --text: #171921;
-    --muted: #646b78;
-}
+const themeBtn = document.getElementById("themeBtn");
+const menuBtn = document.getElementById("menuBtn");
+const nav = document.getElementById("nav");
 
-body.modal-open {
-    overflow: hidden;
-}
 
-a {
-    text-decoration: none;
-    color: inherit;
-}
+/* =========================================
+   LOAD ALL DATABASE FILES
+   ========================================= */
 
-button,
-input,
-select {
-    font-family: inherit;
-}
+async function loadDatabase() {
 
-button {
-    cursor: pointer;
-}
+    try {
 
-.container {
-    width: min(1160px, 92%);
-    margin: auto;
-}
+        console.log("Loading RunMyGame database...");
 
-.hidden {
-    display: none !important;
-}
 
+        const [gamesResponse, cpusResponse, gpusResponse] =
+            await Promise.all([
 
-/* NAV */
+                fetch("./data/games.json"),
 
-.header {
-    height: 70px;
+                fetch("./data/cpus.json"),
 
-    position: fixed;
-    inset: 0 0 auto;
+                fetch("./data/gpus.json")
 
-    z-index: 1000;
+            ]);
 
-    background: rgba(7,8,13,.82);
 
-    backdrop-filter: blur(18px);
+        if (!gamesResponse.ok) {
+            throw new Error(
+                "games.json failed to load"
+            );
+        }
 
-    border-bottom: 1px solid rgba(255,255,255,.06);
-}
 
-.light .header {
-    background: rgba(255,255,255,.85);
-    border-color: var(--border);
-}
+        if (!cpusResponse.ok) {
+            throw new Error(
+                "cpus.json failed to load"
+            );
+        }
 
-.nav {
-    height: 100%;
 
-    display: flex;
-    align-items: center;
-}
+        if (!gpusResponse.ok) {
+            throw new Error(
+                "gpus.json failed to load"
+            );
+        }
 
-.logo {
-    display: flex;
-    align-items: center;
 
-    gap: 9px;
+        games = await gamesResponse.json();
+        cpus = await cpusResponse.json();
+        gpus = await gpusResponse.json();
 
-    font-size: 19px;
-    font-weight: 900;
-}
 
-.logo > span:last-child {
-    color: var(--primary-light);
-}
+        /*
+         * Make sure the returned data is an array.
+         */
 
-.logo-icon {
-    width: 36px;
-    height: 36px;
+        if (!Array.isArray(games)) {
+            throw new Error(
+                "games.json is not an array"
+            );
+        }
 
-    display: grid;
-    place-items: center;
 
-    border-radius: 10px;
+        if (!Array.isArray(cpus)) {
+            throw new Error(
+                "cpus.json is not an array"
+            );
+        }
 
-    background: var(--primary);
-    color: white;
-}
 
-nav {
-    display: flex;
+        if (!Array.isArray(gpus)) {
+            throw new Error(
+                "gpus.json is not an array"
+            );
+        }
 
-    gap: 28px;
 
-    margin-left: auto;
-    margin-right: 25px;
-}
+        console.log(
+            "Games loaded:",
+            games.length
+        );
 
-nav a {
-    color: var(--muted);
+        console.log(
+            "CPUs loaded:",
+            cpus.length
+        );
 
-    font-size: 11px;
-    font-weight: 700;
-}
+        console.log(
+            "GPUs loaded:",
+            gpus.length
+        );
 
-nav a:hover {
-    color: var(--text);
-}
 
-.nav-buttons {
-    display: flex;
-    gap: 8px;
-}
+        /*
+         * IMPORTANT:
+         * Search setup happens AFTER
+         * JSON data has loaded.
+         */
 
-.nav-buttons button {
-    width: 38px;
-    height: 38px;
+        setupSearch(
+            cpuSearch,
+            cpuSuggestions,
+            cpus,
+            "cpu"
+        );
 
-    border: 1px solid var(--border);
-    border-radius: 10px;
 
-    background: var(--card);
-    color: var(--text);
-}
+        setupSearch(
+            gpuSearch,
+            gpuSuggestions,
+            gpus,
+            "gpu"
+        );
 
-#menuBtn {
-    display: none;
-}
 
+        setupSearch(
+            gameSearch,
+            gameSuggestions,
+            games,
+            "game"
+        );
 
-/* HERO */
 
-.hero {
-    min-height: 100vh;
+        /*
+         * Render games
+         */
 
-    padding: 140px 0 80px;
+        renderGames(games);
 
-    display: flex;
-    align-items: center;
 
-    position: relative;
-}
+        /*
+         * Everything loaded successfully
+         */
 
-.hero::before {
-    content: "";
+        console.log(
+            "RunMyGame database ready!"
+        );
 
-    position: absolute;
 
-    width: 500px;
-    height: 500px;
+    } catch (error) {
 
-    left: -250px;
-    top: 100px;
+        console.error(
+            "DATABASE ERROR:",
+            error
+        );
 
-    border-radius: 50%;
 
-    background: var(--primary);
+        gamesGrid.innerHTML = `
 
-    opacity: .08;
+            <div class="empty">
 
-    filter: blur(120px);
-}
+                <i class="fa-solid fa-triangle-exclamation"></i>
 
-.hero-content {
-    display: grid;
+                <p>
+                    Database could not be loaded.
+                </p>
 
-    grid-template-columns: 1.1fr .9fr;
+            </div>
 
-    gap: 70px;
+        `;
 
-    align-items: center;
-}
-
-.badge {
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 7px;
-
-    color: var(--primary-light);
-
-    font-size: 10px;
-    font-weight: 800;
-
-    letter-spacing: 1.5px;
-}
-
-.hero h1 {
-    margin-top: 20px;
-
-    font-size: clamp(50px, 7vw, 78px);
-
-    line-height: .98;
-
-    letter-spacing: -5px;
-
-    font-weight: 900;
-}
-
-.hero h1 strong {
-    display: block;
-
-    color: var(--primary-light);
-}
-
-.hero-text > p {
-    max-width: 580px;
-
-    margin-top: 25px;
-
-    color: var(--muted);
-
-    font-size: 15px;
-}
-
-.hero-buttons {
-    display: flex;
-
-    gap: 10px;
-
-    margin-top: 30px;
-}
-
-.btn {
-    height: 48px;
-
-    padding: 0 20px;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 8px;
-
-    border-radius: 10px;
-
-    font-size: 11px;
-    font-weight: 800;
-}
-
-.primary {
-    background: var(--primary);
-    color: white;
-}
-
-.secondary {
-    border: 1px solid var(--border);
-    background: var(--card);
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-}
-
-
-/* HERO CARD */
-
-.hero-card {
-    padding: 25px;
-
-    border: 1px solid var(--border);
-
-    border-radius: 22px;
-
-    background: var(--card);
-
-    box-shadow: 0 30px 80px rgba(0,0,0,.35);
-}
-
-.hero-card-top {
-    display: flex;
-
-    justify-content: space-between;
-    align-items: center;
-
-    padding-bottom: 20px;
-
-    border-bottom: 1px solid var(--border);
-}
-
-.hero-card-top small {
-    color: var(--primary-light);
-
-    font-size: 8px;
-    font-weight: 800;
-
-    letter-spacing: 1.3px;
-}
-
-.hero-card-top h3 {
-    margin-top: 4px;
-
-    font-size: 17px;
-}
-
-.online {
-    width: 9px;
-    height: 9px;
-
-    border-radius: 50%;
-
-    background: var(--green);
-
-    box-shadow: 0 0 15px var(--green);
-}
-
-.hero-specs {
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 10px;
-
-    padding-top: 20px;
-}
-
-.spec {
-    display: flex;
-
-    align-items: center;
-
-    gap: 9px;
-
-    padding: 13px;
-
-    border: 1px solid var(--border);
-
-    border-radius: 11px;
-
-    background: rgba(255,255,255,.02);
-}
-
-.spec > i {
-    width: 34px;
-    height: 34px;
-
-    display: grid;
-    place-items: center;
-
-    border-radius: 9px;
-
-    color: var(--primary-light);
-
-    background: rgba(118,87,255,.1);
-}
-
-.spec small {
-    display: block;
-
-    color: var(--muted);
-
-    font-size: 8px;
-}
-
-.spec strong {
-    display: block;
-
-    max-width: 120px;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    font-size: 10px;
-}
-
-
-/* SECTIONS */
-
-.section {
-    padding: 100px 0;
-}
-
-#checker {
-    background: var(--bg2);
-}
-
-.games-section {
-    background: var(--bg);
-}
-
-.section-title {
-    max-width: 600px;
-
-    margin: 0 auto 45px;
-
-    text-align: center;
-}
-
-.section-title > span {
-    color: var(--primary-light);
-
-    font-size: 9px;
-    font-weight: 800;
-
-    letter-spacing: 1.5px;
-}
-
-.section-title h2 {
-    margin-top: 8px;
-
-    font-size: 40px;
-
-    letter-spacing: -2px;
-}
-
-.section-title p {
-    margin-top: 10px;
-
-    color: var(--muted);
-
-    font-size: 13px;
-}
-
-
-/* CHECKER */
-
-.checker-grid {
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 20px;
-}
-
-.panel {
-    padding: 25px;
-
-    border: 1px solid var(--border);
-
-    border-radius: var(--radius);
-
-    background: var(--card);
-
-    box-shadow: 0 20px 60px rgba(0,0,0,.15);
-}
-
-.panel-title {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    margin-bottom: 25px;
-
-    padding-bottom: 18px;
-
-    border-bottom: 1px solid var(--border);
-}
-
-.panel-title small {
-    color: var(--primary-light);
-
-    font-size: 8px;
-    font-weight: 800;
-
-    letter-spacing: 1.3px;
-}
-
-.panel-title h3 {
-    font-size: 18px;
-}
-
-.panel-title > i {
-    color: var(--primary-light);
-
-    font-size: 22px;
-}
-
-label {
-    display: block;
-
-    margin: 15px 0 7px;
-
-    font-size: 10px;
-    font-weight: 700;
-}
-
-label i {
-    margin-right: 5px;
-
-    color: var(--primary-light);
-}
-
-.select-search {
-    position: relative;
-}
-
-.select-search input,
-select {
-    width: 100%;
-    height: 46px;
-
-    padding: 0 13px;
-
-    border: 1px solid var(--border);
-
-    border-radius: 9px;
-
-    outline: none;
-
-    background: var(--bg2);
-
-    color: var(--text);
-
-    font-size: 10px;
-}
-
-.select-search input:focus,
-select:focus {
-    border-color: var(--primary);
-}
-
-.suggestions {
-    position: absolute;
-
-    left: 0;
-    right: 0;
-    top: 51px;
-
-    z-index: 50;
-
-    max-height: 230px;
-
-    overflow-y: auto;
-
-    border: 1px solid var(--border);
-
-    border-radius: 10px;
-
-    background: var(--card);
-
-    box-shadow: 0 20px 50px rgba(0,0,0,.4);
-
-    display: none;
-}
-
-.suggestions.active {
-    display: block;
-}
-
-.suggestion {
-    padding: 11px 13px;
-
-    border-bottom: 1px solid var(--border);
-
-    cursor: pointer;
-
-    font-size: 10px;
-}
-
-.suggestion:hover {
-    background: var(--card2);
-
-    color: var(--primary-light);
-}
-
-.two-columns {
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 12px;
-}
-
-.save-btn,
-.check-btn {
-    width: 100%;
-
-    height: 47px;
-
-    margin-top: 20px;
-
-    border-radius: 9px;
-
-    font-size: 10px;
-    font-weight: 800;
-}
-
-.save-btn {
-    border: 1px solid var(--border);
-
-    background: var(--card2);
-
-    color: var(--text);
-}
-
-.check-btn {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    padding: 0 17px;
-
-    border: 0;
-
-    background: var(--primary);
-
-    color: white;
-}
-
-.check-btn:hover {
-    background: #6345e7;
-}
-
-
-/* SELECTED GAME */
-
-.selected-game {
-    min-height: 160px;
-
-    margin-top: 15px;
-
-    overflow: hidden;
-
-    border: 1px solid var(--border);
-
-    border-radius: 12px;
-
-    background: var(--bg2);
-}
-
-.empty {
-    min-height: 160px;
-
-    display: grid;
-
-    place-items: center;
-
-    align-content: center;
-
-    gap: 7px;
-
-    color: var(--muted);
-
-    text-align: center;
-}
-
-.empty i {
-    color: var(--primary-light);
-
-    font-size: 25px;
-}
-
-.empty p {
-    font-size: 9px;
-}
-
-.selected-game-content {
-    display: flex;
-
-    gap: 13px;
-
-    padding: 12px;
-}
-
-.selected-game-content img {
-    width: 100px;
-    height: 110px;
-
-    object-fit: cover;
-
-    border-radius: 9px;
-}
-
-.selected-game-content h3 {
-    font-size: 13px;
-}
-
-.selected-game-content p {
-    margin-top: 5px;
-
-    color: var(--muted);
-
-    font-size: 9px;
-}
-
-
-/* RESULT */
-
-.result {
-    display: grid;
-
-    grid-template-columns: auto 1fr auto;
-
-    align-items: center;
-
-    gap: 18px;
-
-    margin-top: 20px;
-
-    padding: 23px;
-
-    border: 1px solid var(--green);
-
-    border-radius: var(--radius);
-
-    background: rgba(57,217,130,.05);
-}
-
-.result.warning {
-    border-color: var(--yellow);
-}
-
-.result.danger {
-    border-color: var(--red);
-}
-
-.result-icon {
-    width: 52px;
-    height: 52px;
-
-    display: grid;
-    place-items: center;
-
-    border-radius: 14px;
-
-    background: rgba(57,217,130,.1);
-
-    color: var(--green);
-}
-
-.result.warning .result-icon {
-    color: var(--yellow);
-
-    background: rgba(255,194,91,.1);
-}
-
-.result.danger .result-icon {
-    color: var(--red);
-
-    background: rgba(255,85,112,.1);
-}
-
-.result-info small {
-    color: var(--muted);
-
-    font-size: 8px;
-    font-weight: 800;
-}
-
-.result-info h2 {
-    font-size: 18px;
-}
-
-.result-info p {
-    color: var(--muted);
-
-    font-size: 10px;
-}
-
-.fps {
-    text-align: center;
-
-    padding-left: 25px;
-
-    border-left: 1px solid var(--border);
-}
-
-.fps small {
-    display: block;
-
-    color: var(--muted);
-
-    font-size: 8px;
-}
-
-.fps strong {
-    display: inline-block;
-
-    color: var(--green);
-
-    font-size: 36px;
-}
-
-.result.warning .fps strong {
-    color: var(--yellow);
-}
-
-.result.danger .fps strong {
-    color: var(--red);
-}
-
-.fps span {
-    color: var(--muted);
-
-    font-size: 9px;
-}
-
-
-/* COMPARISON */
-
-.comparison {
-    margin-top: 20px;
-
-    padding: 23px;
-
-    border: 1px solid var(--border);
-
-    border-radius: var(--radius);
-
-    background: var(--card);
-}
-
-.comparison h3 {
-    font-size: 15px;
-
-    margin-bottom: 15px;
-}
-
-.compare-row {
-    display: grid;
-
-    grid-template-columns: 1fr 1fr 1fr;
-
-    gap: 10px;
-
-    padding: 13px 0;
-
-    border-bottom: 1px solid var(--border);
-
-    font-size: 9px;
-}
-
-.compare-row span {
-    color: var(--muted);
-}
-
-.compare-row strong.good {
-    color: var(--green);
-}
-
-.compare-row strong.bad {
-    color: var(--red);
-}
-
-
-/* GAMES */
-
-.library-search {
-    max-width: 650px;
-
-    margin: 0 auto 30px;
-
-    position: relative;
-}
-
-.library-search i {
-    position: absolute;
-
-    left: 15px;
-    top: 50%;
-
-    transform: translateY(-50%);
-
-    color: var(--muted);
-}
-
-.library-search input {
-    width: 100%;
-    height: 50px;
-
-    padding: 0 15px 0 40px;
-
-    border: 1px solid var(--border);
-
-    border-radius: 11px;
-
-    outline: none;
-
-    background: var(--card);
-
-    color: var(--text);
-
-    font-size: 11px;
-}
-
-.games-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap: 16px;
-}
-
-.game-card {
-    overflow: hidden;
-
-    border: 1px solid var(--border);
-
-    border-radius: var(--radius);
-
-    background: var(--card);
-
-    transition: .25s;
-}
-
-.game-card:hover {
-    transform: translateY(-5px);
-
-    border-color: var(--primary);
-}
-
-.game-card img {
-    width: 100%;
-    height: 175px;
-
-    display: block;
-
-    object-fit: cover;
-}
-
-.game-card-content {
-    padding: 15px;
-}
-
-.game-card h3 {
-    font-size: 12px;
-}
-
-.game-card p {
-    margin-top: 4px;
-
-    color: var(--muted);
-
-    font-size: 9px;
-}
-
-.game-card button {
-    width: 100%;
-
-    height: 36px;
-
-    margin-top: 12px;
-
-    border: 1px solid var(--border);
-
-    border-radius: 8px;
-
-    background: transparent;
-
-    color: var(--text);
-
-    font-size: 9px;
-    font-weight: 700;
-}
-
-.game-card button:hover {
-    border-color: var(--primary);
-
-    color: var(--primary-light);
-}
-
-
-/* MODAL */
-
-.modal {
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 3000;
-
-    display: grid;
-
-    place-items: center;
-
-    padding: 20px;
-}
-
-.modal-bg {
-    position: absolute;
-
-    inset: 0;
-
-    background: rgba(0,0,0,.78);
-
-    backdrop-filter: blur(8px);
-}
-
-.modal-card {
-    width: min(700px,100%);
-
-    max-height: 90vh;
-
-    overflow-y: auto;
-
-    position: relative;
-
-    z-index: 2;
-
-    border: 1px solid var(--border);
-
-    border-radius: 20px;
-
-    background: var(--card);
-}
-
-.close {
-    position: absolute;
-
-    top: 13px;
-    right: 13px;
-
-    z-index: 3;
-
-    width: 37px;
-    height: 37px;
-
-    border: 0;
-
-    border-radius: 9px;
-
-    color: white;
-
-    background: rgba(0,0,0,.6);
-}
-
-.modal-card > img {
-    width: 100%;
-    height: 230px;
-
-    display: block;
-
-    object-fit: cover;
-}
-
-.modal-content {
-    padding: 25px;
-}
-
-.modal-content > span {
-    color: var(--primary-light);
-
-    font-size: 9px;
-    font-weight: 800;
-}
-
-.modal-content h2 {
-    margin-top: 3px;
-
-    font-size: 28px;
-}
-
-.modal-content > p {
-    margin-top: 12px;
-
-    color: var(--muted);
-
-    font-size: 10px;
-}
-
-.requirements {
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 13px;
-
-    margin-top: 20px;
-}
-
-.requirements > div {
-    padding: 17px;
-
-    border: 1px solid var(--border);
-
-    border-radius: 12px;
-
-    background: var(--bg2);
-}
-
-.requirements h4 {
-    font-size: 11px;
-
-    margin-bottom: 10px;
-}
-
-.requirements h4 i {
-    color: var(--primary-light);
-
-    margin-right: 5px;
-}
-
-.requirements p {
-    color: var(--muted);
-
-    font-size: 9px;
-
-    line-height: 1.8;
-}
-
-.modal-check {
-    width: 100%;
-
-    height: 46px;
-
-    margin-top: 18px;
-
-    border: 0;
-
-    border-radius: 9px;
-
-    color: white;
-
-    background: var(--primary);
-
-    font-size: 10px;
-    font-weight: 800;
-}
-
-
-/* FOOTER */
-
-footer {
-    padding: 30px 0;
-
-    border-top: 1px solid var(--border);
-
-    background: var(--bg);
-}
-
-footer .container {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-}
-
-.footer-logo {
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-
-    font-size: 14px;
-    font-weight: 800;
-}
-
-.footer-logo i {
-    color: var(--primary-light);
-}
-
-footer p {
-    color: var(--muted);
-
-    font-size: 9px;
-}
-
-
-/* RESPONSIVE */
-
-@media(max-width:950px) {
-
-    .hero-content {
-        grid-template-columns: 1fr;
-    }
-
-    .hero-text {
-        text-align: center;
-    }
-
-    .hero-text > p {
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .hero-buttons {
-        justify-content: center;
-    }
-
-    .hero-card {
-        width: min(600px,100%);
-        margin: auto;
-    }
-
-    .games-grid {
-        grid-template-columns: repeat(2,1fr);
-    }
-
-}
-
-@media(max-width:750px) {
-
-    #menuBtn {
-        display: block;
-    }
-
-    nav {
-        display: none;
-
-        position: absolute;
-
-        top: 65px;
-
-        left: 4%;
-        right: 4%;
-
-        padding: 8px;
-
-        flex-direction: column;
-
-        gap: 0;
-
-        border: 1px solid var(--border);
-
-        border-radius: 12px;
-
-        background: var(--card);
-    }
-
-    nav.active {
-        display: flex;
-    }
-
-    nav a {
-        padding: 13px;
-    }
-
-    .checker-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .result {
-        grid-template-columns: auto 1fr;
-    }
-
-    .fps {
-        grid-column: 1 / -1;
-
-        border-left: 0;
-
-        border-top: 1px solid var(--border);
-
-        padding: 15px 0 0;
-    }
-
-}
-
-@media(max-width:520px) {
-
-    .hero h1 {
-        font-size: 44px;
-
-        letter-spacing: -3px;
-    }
-
-    .hero-buttons {
-        flex-direction: column;
-    }
-
-    .btn {
-        width: 100%;
-    }
-
-    .hero-specs {
-        grid-template-columns: 1fr;
-    }
-
-    .two-columns,
-    .requirements {
-        grid-template-columns: 1fr;
-    }
-
-    .games-grid {
-        grid-template-columns: 1fr;
-    }
-
-    footer .container {
-        flex-direction: column;
-
-        gap: 10px;
-
-        text-align: center;
     }
 
 }
 
 
+/* =========================================
+   SEARCH SYSTEM
+   ========================================= */
+
+function setupSearch(
+    input,
+    suggestionsBox,
+    data,
+    type
+) {
+
+    if (!input || !suggestionsBox) {
+
+        console.error(
+            "Search element missing:",
+            type
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * Remove old listeners by cloning input.
+     * This prevents duplicate searches.
+     */
+
+    const newInput = input.cloneNode(true);
+
+    input.parentNode.replaceChild(
+        newInput,
+        input
+    );
+
+
+    /*
+     * Update references
+     */
+
+    if (type === "cpu") {
+        window.cpuSearchElement = newInput;
+    }
+
+    if (type === "gpu") {
+        window.gpuSearchElement = newInput;
+    }
+
+    if (type === "game") {
+        window.gameSearchElement = newInput;
+    }
+
+
+    newInput.addEventListener(
+        "input",
+        function () {
+
+            const query =
+                this.value
+                    .trim()
+                    .toLowerCase();
+
+
+            suggestionsBox.innerHTML = "";
+
+
+            /*
+             * Empty search
+             */
+
+            if (!query) {
+
+                suggestionsBox.classList.remove(
+                    "active"
+                );
+
+                return;
+
+            }
+
+
+            /*
+             * Search by name.
+             */
+
+            const matches =
+                data.filter(item => {
+
+                    if (!item.name) {
+                        return false;
+                    }
+
+                    return item.name
+                        .toLowerCase()
+                        .includes(query);
+
+                });
+
+
+            /*
+             * Maximum 10 suggestions
+             */
+
+            const results =
+                matches.slice(0, 10);
+
+
+            /*
+             * No results
+             */
+
+            if (!results.length) {
+
+                suggestionsBox.innerHTML = `
+
+                    <div class="suggestion">
+                        No results found
+                    </div>
+
+                `;
+
+                suggestionsBox.classList.add(
+                    "active"
+                );
+
+                return;
+
+            }
+
+
+            /*
+             * Create suggestions
+             */
+
+            results.forEach(item => {
+
+                const suggestion =
+                    document.createElement("div");
+
+
+                suggestion.className =
+                    "suggestion";
+
+
+                suggestion.textContent =
+                    item.name;
+
+
+                suggestion.addEventListener(
+                    "click",
+                    function () {
+
+                        newInput.value =
+                            item.name;
+
+
+                        suggestionsBox.classList.remove(
+                            "active"
+                        );
+
+
+                        /*
+                         * CPU selected
+                         */
+
+                        if (type === "cpu") {
+
+                            selectedCPU =
+                                item;
+
+                            updateHero();
+
+                        }
+
+
+                        /*
+                         * GPU selected
+                         */
+
+                        if (type === "gpu") {
+
+                            selectedGPU =
+                                item;
+
+                            updateHero();
+
+                        }
+
+
+                        /*
+                         * Game selected
+                         */
+
+                        if (type === "game") {
+
+                            selectGame(item);
+
+                        }
+
+                    }
+                );
+
+
+                suggestionsBox.appendChild(
+                    suggestion
+                );
+
+            });
+
+
+            suggestionsBox.classList.add(
+                "active"
+            );
+
+        }
+    );
+
+
+    /*
+     * Close suggestions when clicking outside.
+     */
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            if (
+                !newInput.contains(event.target) &&
+                !suggestionsBox.contains(event.target)
+            ) {
+
+                suggestionsBox.classList.remove(
+                    "active"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   SELECT GAME
+   ========================================= */
+
+function selectGame(game) {
+
+    selectedGame = game;
+
+
+    const image =
+        game.image || "";
+
+
+    selectedGameBox.innerHTML = `
+
+        <div class="selected-game-content">
+
+            <img
+                src="${image}"
+                alt="${escapeHTML(game.name)}"
+                loading="lazy"
+                onerror="this.style.display='none'"
+            >
+
+            <div>
+
+                <h3>
+                    ${escapeHTML(game.name)}
+                </h3>
+
+                <p>
+                    ${game.year || ""}
+                    ${game.genre ? " • " + escapeHTML(game.genre) : ""}
+                </p>
+
+                <p>
+                    Game selected.
+                    Click CHECK MY PC below.
+                </p>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    updateHero();
+
+}
+
+
+/* =========================================
+   UPDATE HERO
+   ========================================= */
+
+function updateHero() {
+
+    const heroPcName =
+        document.getElementById("heroPcName");
+
+    const heroCpu =
+        document.getElementById("heroCpu");
+
+    const heroGpu =
+        document.getElementById("heroGpu");
+
+    const heroRam =
+        document.getElementById("heroRam");
+
+    const heroVram =
+        document.getElementById("heroVram");
+
+
+    if (heroPcName) {
+
+        heroPcName.textContent =
+            selectedCPU && selectedGPU
+                ? "Gaming PC"
+                : "Not configured";
+
+    }
+
+
+    if (heroCpu) {
+
+        heroCpu.textContent =
+            selectedCPU
+                ? selectedCPU.name
+                : "Not set";
+
+    }
+
+
+    if (heroGpu) {
+
+        heroGpu.textContent =
+            selectedGPU
+                ? selectedGPU.name
+                : "Not set";
+
+    }
+
+
+    if (heroRam) {
+
+        heroRam.textContent =
+            `${ram.value} GB`;
+
+    }
+
+
+    if (heroVram) {
+
+        heroVram.textContent =
+            `${vram.value} GB`;
+
+    }
+
+}
+
+
+/* =========================================
+   RAM / VRAM CHANGE
+   ========================================= */
+
+if (ram) {
+
+    ram.addEventListener(
+        "change",
+        updateHero
+    );
+
+}
+
+
+if (vram) {
+
+    vram.addEventListener(
+        "change",
+        updateHero
+    );
+
+}
+
+
+/* =========================================
+   SAVE PC
+   ========================================= */
+
+if (savePC) {
+
+    savePC.addEventListener(
+        "click",
+        function () {
+
+            if (!selectedCPU) {
+
+                alert(
+                    "Please select your CPU first."
+                );
+
+                return;
+
+            }
+
+
+            if (!selectedGPU) {
+
+                alert(
+                    "Please select your GPU first."
+                );
+
+                return;
+
+            }
+
+
+            const pc = {
+
+                cpu: selectedCPU,
+
+                gpu: selectedGPU,
+
+                ram: Number(ram.value),
+
+                vram: Number(vram.value)
+
+            };
+
+
+            localStorage.setItem(
+                "runmygamePC",
+                JSON.stringify(pc)
+            );
+
+
+            updateHero();
+
+
+            alert(
+                "Your PC has been saved!"
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   LOAD SAVED PC
+   ========================================= */
+
+function loadSavedPC() {
+
+    const saved =
+        localStorage.getItem(
+            "runmygamePC"
+        );
+
+
+    if (!saved) {
+        return;
+    }
+
+
+    try {
+
+        const pc =
+            JSON.parse(saved);
+
+
+        if (pc.cpu) {
+
+            selectedCPU =
+                pc.cpu;
+
+        }
+
+
+        if (pc.gpu) {
+
+            selectedGPU =
+                pc.gpu;
+
+        }
+
+
+        if (pc.ram) {
+
+            ram.value =
+                pc.ram;
+
+        }
+
+
+        if (pc.vram) {
+
+            vram.value =
+                pc.vram;
+
+        }
+
+
+        /*
+         * Search inputs may have been
+         * replaced by setupSearch.
+         */
+
+        if (window.cpuSearchElement && selectedCPU) {
+
+            window.cpuSearchElement.value =
+                selectedCPU.name;
+
+        }
+
+
+        if (window.gpuSearchElement && selectedGPU) {
+
+            window.gpuSearchElement.value =
+                selectedGPU.name;
+
+        }
+
+
+        updateHero();
+
+
+    } catch (error) {
+
+        console.error(
+            "Saved PC error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   CHECK BUTTON
+   ========================================= */
+
+if (checkBtn) {
+
+    checkBtn.addEventListener(
+        "click",
+        function () {
+
+            if (!selectedGame) {
+
+                alert(
+                    "Please select a game first."
+                );
+
+                return;
+
+            }
+
+
+            if (!selectedCPU) {
+
+                alert(
+                    "Please select your CPU."
+                );
+
+                return;
+
+            }
+
+
+            if (!selectedGPU) {
+
+                alert(
+                    "Please select your GPU."
+                );
+
+                return;
+
+            }
+
+
+            checkPerformance();
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   PERFORMANCE CHECK
+   ========================================= */
+
+function checkPerformance() {
+
+    const minimum =
+        selectedGame.minimum || {};
+
+    const recommended =
+        selectedGame.recommended || {};
+
+
+    const userRAM =
+        Number(ram.value);
+
+
+    const userVRAM =
+        Number(vram.value);
+
+
+    /*
+     * CPU
+     */
+
+    const cpuScore =
+        compareCPU(
+            selectedCPU,
+            minimum.cpu,
+            recommended.cpu
+        );
+
+
+    /*
+     * GPU
+     */
+
+    const gpuScore =
+        compareGPU(
+            selectedGPU,
+            minimum.gpu,
+            recommended.gpu
+        );
+
+
+    /*
+     * RAM
+     */
+
+    const minimumRAM =
+        Number(minimum.ram || 4);
+
+
+    const recommendedRAM =
+        Number(recommended.ram || minimumRAM);
+
+
+    const ramScore =
+        getMemoryScore(
+            userRAM,
+            minimumRAM,
+            recommendedRAM
+        );
+
+
+    /*
+     * VRAM
+     */
+
+    const minimumVRAM =
+        Number(minimum.vram || 1);
+
+
+    const recommendedVRAM =
+        Number(recommended.vram || minimumVRAM);
+
+
+    const vramScore =
+        getMemoryScore(
+            userVRAM,
+            minimumVRAM,
+            recommendedVRAM
+        );
+
+
+    /*
+     * Overall score
+     */
+
+    const score =
+        (
+            cpuScore * 0.30 +
+            gpuScore * 0.40 +
+            ramScore * 0.20 +
+            vramScore * 0.10
+        );
+
+
+    let status;
+
+
+    if (score >= 85) {
+
+        status = "good";
+
+    }
+
+    else if (score >= 65) {
+
+        status = "playable";
+
+    }
+
+    else {
+
+        status = "danger";
+
+    }
+
+
+    showResult(
+        status,
+        score,
+        cpuScore,
+        gpuScore,
+        ramScore,
+        vramScore
+    );
+
+}
+
+
+/* =========================================
+   MEMORY SCORE
+   ========================================= */
+
+function getMemoryScore(
+    user,
+    minimum,
+    recommended
+) {
+
+    if (user >= recommended) {
+
+        return 100;
+
+    }
+
+
+    if (user >= minimum) {
+
+        return 70;
+
+    }
+
+
+    return 25;
+
+}
+
+
+/* =========================================
+   CPU COMPARISON
+   ========================================= */
+
+function compareCPU(
+    userCPU,
+    minimumCPU,
+    recommendedCPU
+) {
+
+    const userScore =
+        getCPUScore(userCPU);
+
+
+    const minimumScore =
+        findCPUScore(minimumCPU);
+
+
+    const recommendedScore =
+        findCPUScore(recommendedCPU);
+
+
+    /*
+     * If requirements are not
+     * available in database,
+     * don't pretend it's exact.
+     */
+
+    if (
+        minimumScore === null ||
+        recommendedScore === null
+    ) {
+
+        return 70;
+
+    }
+
+
+    if (
+        userScore >= recommendedScore
+    ) {
+
+        return 100;
+
+    }
+
+
+    if (
+        userScore >= minimumScore
+    ) {
+
+        return 70;
+
+    }
+
+
+    return 25;
+
+}
+
+
+/* =========================================
+   GPU COMPARISON
+   ========================================= */
+
+function compareGPU(
+    userGPU,
+    minimumGPU,
+    recommendedGPU
+) {
+
+    const userScore =
+        getGPUScore(userGPU);
+
+
+    const minimumScore =
+        findGPUScore(minimumGPU);
+
+
+    const recommendedScore =
+        findGPUScore(recommendedGPU);
+
+
+    if (
+        minimumScore === null ||
+        recommendedScore === null
+    ) {
+
+        return 70;
+
+    }
+
+
+    if (
+        userScore >= recommendedScore
+    ) {
+
+        return 100;
+
+    }
+
+
+    if (
+        userScore >= minimumScore
+    ) {
+
+        return 70;
+
+    }
+
+
+    return 25;
+
+}
+
+
+/* =========================================
+   CPU SCORE
+   ========================================= */
+
+function getCPUScore(cpu) {
+
+    if (!cpu) {
+        return 0;
+    }
+
+
+    /*
+     * If database has performance score,
+     * use it.
+     */
+
+    if (
+        cpu.performance !== undefined
+    ) {
+
+        return Number(
+            cpu.performance
+        );
+
+    }
+
+
+    /*
+     * Fallback score.
+     */
+
+    const cores =
+        Number(cpu.cores || 2);
+
+
+    const threads =
+        Number(
+            cpu.threads ||
+            cores
+        );
+
+
+    return (
+        cores * 100 +
+        threads * 50
+    );
+
+}
+
+
+/* =========================================
+   GPU SCORE
+   ========================================= */
+
+function getGPUScore(gpu) {
+
+    if (!gpu) {
+        return 0;
+    }
+
+
+    /*
+     * If database has performance score,
+     * use it.
+     */
+
+    if (
+        gpu.performance !== undefined
+    ) {
+
+        return Number(
+            gpu.performance
+        );
+
+    }
+
+
+    /*
+     * Fallback score.
+     */
+
+    const vram =
+        Number(gpu.vram || 1);
+
+
+    return vram * 100;
+
+}
+
+
+/* =========================================
+   FIND CPU SCORE
+   ========================================= */
+
+function findCPUScore(
+    requirement
+) {
+
+    if (!requirement) {
+        return null;
+    }
+
+
+    const required =
+        String(requirement)
+            .toLowerCase()
+            .trim();
+
+
+    /*
+     * Exact match first
+     */
+
+    let found =
+        cpus.find(
+            cpu =>
+                String(cpu.name)
+                    .toLowerCase()
+                    .trim() === required
+        );
+
+
+    /*
+     * Partial match
+     */
+
+    if (!found) {
+
+        found =
+            cpus.find(
+                cpu => {
+
+                    const name =
+                        String(cpu.name)
+                            .toLowerCase();
+
+                    return (
+                        name.includes(required) ||
+                        required.includes(name)
+                    );
+
+                }
+            );
+
+    }
+
+
+    if (!found) {
+        return null;
+    }
+
+
+    return getCPUScore(found);
+
+}
+
+
+/* =========================================
+   FIND GPU SCORE
+   ========================================= */
+
+function findGPUScore(
+    requirement
+) {
+
+    if (!requirement) {
+        return null;
+    }
+
+
+    const required =
+        String(requirement)
+            .toLowerCase()
+            .trim();
+
+
+    /*
+     * Exact match
+     */
+
+    let found =
+        gpus.find(
+            gpu =>
+                String(gpu.name)
+                    .toLowerCase()
+                    .trim() === required
+        );
+
+
+    /*
+     * Partial match
+     */
+
+    if (!found) {
+
+        found =
+            gpus.find(
+                gpu => {
+
+                    const name =
+                        String(gpu.name)
+                            .toLowerCase();
+
+                    return (
+                        name.includes(required) ||
+                        required.includes(name)
+                    );
+
+                }
+            );
+
+    }
+
+
+    if (!found) {
+        return null;
+    }
+
+
+    return getGPUScore(found);
+
+}
+
+
+/* =========================================
+   SHOW RESULT
+   ========================================= */
+
+function showResult(
+    status,
+    score,
+    cpuScore,
+    gpuScore,
+    ramScore,
+    vramScore
+) {
+
+    result.className =
+        "result";
+
+
+    result.classList.add(
+        status
+    );
+
+
+    result.classList.remove(
+        "hidden"
+    );
+
+
+    const resultIcon =
+        document.getElementById(
+            "resultIcon"
+        );
+
+
+    const resultTitle =
+        document.getElementById(
+            "resultTitle"
+        );
+
+
+    const resultText =
+        document.getElementById(
+            "resultText"
+        );
+
+
+    if (status === "good") {
+
+        resultIcon.innerHTML =
+            '<i class="fa-solid fa-circle-check"></i>';
+
+
+        resultTitle.textContent =
+            "Your PC Can Run It";
+
+
+        resultText.textContent =
+            "Your hardware meets or exceeds the available requirements.";
+
+    }
+
+
+    else if (status === "playable") {
+
+        resultIcon.innerHTML =
+            '<i class="fa-solid fa-check"></i>';
+
+
+        resultTitle.textContent =
+            "Likely Playable";
+
+
+        resultText.textContent =
+            "Your PC should run this game, but lower settings may be needed.";
+
+    }
+
+
+    else {
+
+        resultIcon.innerHTML =
+            '<i class="fa-solid fa-xmark"></i>';
+
+
+        resultTitle.textContent =
+            "Not Recommended";
+
+
+        resultText.textContent =
+            "One or more major components are below the minimum requirements.";
+
+    }
+
+
+    /*
+     * Estimated FPS
+     *
+     * This is NOT benchmark data.
+     */
+
+    const fps =
+        calculateFPS(score);
+
+
+    document.getElementById(
+        "fps"
+    ).textContent =
+        fps;
+
+
+    /*
+     * Comparison table
+     */
+
+    comparison.classList.remove(
+        "hidden"
+    );
+
+
+    comparisonRows.innerHTML = `
+
+        ${createCompareRow(
+            "CPU",
+            cpuScore
+        )}
+
+        ${createCompareRow(
+            "GPU",
+            gpuScore
+        )}
+
+        ${createCompareRow(
+            "RAM",
+            ramScore
+        )}
+
+        ${createCompareRow(
+            "VRAM",
+            vramScore
+        )}
+
+    `;
+
+
+    result.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+}
+
+
+/* =========================================
+   COMPARISON ROW
+   ========================================= */
+
+function createCompareRow(
+    name,
+    score
+) {
+
+    const passed =
+        score >= 70;
+
+
+    return `
+
+        <div class="compare-row">
+
+            <span>
+                ${name}
+            </span>
+
+            <strong class="${passed ? "good" : "bad"}">
+
+                ${passed ? "PASS" : "BELOW"}
+
+            </strong>
+
+            <span>
+                ${Math.round(score)}%
+            </span>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================
+   FPS ESTIMATE
+   ========================================= */
+
+function calculateFPS(score) {
+
+    if (score >= 95) {
+        return 80;
+    }
+
+
+    if (score >= 85) {
+        return 65;
+    }
+
+
+    if (score >= 75) {
+        return 55;
+    }
+
+
+    if (score >= 65) {
+        return 45;
+    }
+
+
+    if (score >= 50) {
+        return 30;
+    }
+
+
+    return 20;
+
+}
+
+
+/* =========================================
+   RENDER GAME LIBRARY
+   ========================================= */
+
+function renderGames(list) {
+
+    gamesGrid.innerHTML = "";
+
+
+    if (!list.length) {
+
+        gamesGrid.innerHTML = `
+
+            <div class="empty">
+
+                <i class="fa-solid fa-gamepad"></i>
+
+                <p>
+                    No games found.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.forEach(game => {
+
+        const card =
+            document.createElement("article");
+
+
+        card.className =
+            "game-card";
+
+
+        card.innerHTML = `
+
+            <img
+                src="${game.image || ""}"
+                alt="${escapeHTML(game.name)}"
+                loading="lazy"
+                onerror="this.style.opacity='0'"
+            >
+
+            <div class="game-card-content">
+
+                <h3>
+                    ${escapeHTML(game.name)}
+                </h3>
+
+                <p>
+                    ${game.year || ""}
+                    ${
+                        game.genre
+                            ? " • " +
+                              escapeHTML(game.genre)
+                            : ""
+                    }
+                </p>
+
+                <button>
+                    View Requirements
+                </button>
+
+            </div>
+
+        `;
+
+
+        const button =
+            card.querySelector("button");
+
+
+        button.addEventListener(
+            "click",
+            function () {
+
+                openGameModal(game);
+
+            }
+        );
+
+
+        gamesGrid.appendChild(
+            card
+        );
+
+    });
+
+}
+
+
+/* =========================================
+   GAME LIBRARY SEARCH
+   ========================================= */
+
+if (libraryInput) {
+
+    libraryInput.addEventListener(
+        "input",
+        function () {
+
+            const query =
+                this.value
+                    .trim()
+                    .toLowerCase();
+
+
+            if (!query) {
+
+                renderGames(
+                    games
+                );
+
+                return;
+
+            }
+
+
+            const filtered =
+                games.filter(
+                    game =>
+                        String(game.name)
+                            .toLowerCase()
+                            .includes(query)
+                );
+
+
+            renderGames(
+                filtered
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   GAME MODAL
+   ========================================= */
+
+function openGameModal(game) {
+
+    selectedGame =
+        game;
+
+
+    const modalImage =
+        document.getElementById(
+            "modalImage"
+        );
+
+
+    const modalTitle =
+        document.getElementById(
+            "modalTitle"
+        );
+
+
+    const modalGenre =
+        document.getElementById(
+            "modalGenre"
+        );
+
+
+    const modalDescription =
+        document.getElementById(
+            "modalDescription"
+        );
+
+
+    const modalMinimum =
+        document.getElementById(
+            "modalMinimum"
+        );
+
+
+    const modalRecommended =
+        document.getElementById(
+            "modalRecommended"
+        );
+
+
+    modalImage.src =
+        game.image || "";
+
+
+    modalImage.alt =
+        game.name;
+
+
+    modalTitle.textContent =
+        game.name;
+
+
+    modalGenre.textContent =
+        `${game.year || ""} • ${game.genre || "PC Game"}`;
+
+
+    modalDescription.textContent =
+        "PC system requirements for this game.";
+
+
+    const minimum =
+        game.minimum || {};
+
+
+    const recommended =
+        game.recommended || {};
+
+
+    modalMinimum.innerHTML = `
+
+        CPU:
+        ${escapeHTML(
+            minimum.cpu || "Not available"
+        )}
+
+        <br>
+
+        GPU:
+        ${escapeHTML(
+            minimum.gpu || "Not available"
+        )}
+
+        <br>
+
+        RAM:
+        ${minimum.ram || "?"} GB
+
+        <br>
+
+        VRAM:
+        ${minimum.vram || "?"} GB
+
+    `;
+
+
+    modalRecommended.innerHTML = `
+
+        CPU:
+        ${escapeHTML(
+            recommended.cpu || "Not available"
+        )}
+
+        <br>
+
+        GPU:
+        ${escapeHTML(
+            recommended.gpu || "Not available"
+        )}
+
+        <br>
+
+        RAM:
+        ${recommended.ram || "?"} GB
+
+        <br>
+
+        VRAM:
+        ${recommended.vram || "?"} GB
+
+    `;
+
+
+    modal.classList.remove(
+        "hidden"
+    );
+
+
+    document.body.classList.add(
+        "modal-open"
+    );
+
+}
+
+
+/* =========================================
+   CLOSE MODAL
+   ========================================= */
+
+function hideModal() {
+
+    modal.classList.add(
+        "hidden"
+    );
+
+
+    document.body.classList.remove(
+        "modal-open"
+    );
+
+}
+
+
+if (closeModal) {
+
+    closeModal.addEventListener(
+        "click",
+        hideModal
+    );
+
+}
+
+
+if (modalBg) {
+
+    modalBg.addEventListener(
+        "click",
+        hideModal
+    );
+
+}
+
+
+if (modalCheck) {
+
+    modalCheck.addEventListener(
+        "click",
+        function () {
+
+            hideModal();
+
+
+            document
+                .getElementById("checker")
+                .scrollIntoView({
+                    behavior: "smooth"
+                });
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   ESC KEY
+   ========================================= */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key === "Escape" &&
+            modal &&
+            !modal.classList.contains("hidden")
+        ) {
+
+            hideModal();
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   THEME
+   ========================================= */
+
+if (themeBtn) {
+
+    themeBtn.addEventListener(
+        "click",
+        function () {
+
+            document.body.classList.toggle(
+                "light"
+            );
+
+
+            const light =
+                document.body.classList.contains(
+                    "light"
+                );
+
+
+            localStorage.setItem(
+                "runmygameTheme",
+                light
+                    ? "light"
+                    : "dark"
+            );
+
+
+            themeBtn.innerHTML =
+                light
+                    ? '<i class="fa-solid fa-sun"></i>'
+                    : '<i class="fa-solid fa-moon"></i>';
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   MOBILE MENU
+   ========================================= */
+
+if (menuBtn && nav) {
+
+    menuBtn.addEventListener(
+        "click",
+        function () {
+
+            nav.classList.toggle(
+                "active"
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   ESCAPE HTML
+   ========================================= */
+
+function escapeHTML(value) {
+
+    return String(value)
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================
+   THEME ON START
+   ========================================= */
+
+const savedTheme =
+    localStorage.getItem(
+        "runmygameTheme"
+    );
+
+
+if (savedTheme === "light") {
+
+    document.body.classList.add(
+        "light"
+    );
+
+
+    if (themeBtn) {
+
+        themeBtn.innerHTML =
+            '<i class="fa-solid fa-sun"></i>';
+
+    }
+
+}
+
+
+/* =========================================
+   START APPLICATION
+   ========================================= */
+
+loadDatabase();
+
+loadSavedPC();
+
+updateHero();
