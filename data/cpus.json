@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "brand": "Intel",
+    "name": "Intel Core i5-4570",
+    "generation": "4th Gen",
+    "cores": 4,
+    "threads": 4
+  },
+  {
+    "id": 2,
+    "brand": "Intel",
+    "name": "Intel Core i5-4590",
+    "generation": "4th Gen",
+    "cores": 4,
+    "threads": 4
+  },
+  {
+    "id": 3,
+    "brand": "Intel",
+    "name": "Intel Core i7-4770",
+    "generation": "4th Gen",
+    "cores": 4,
+    "threads": 8
+  },
+  {
+    "id": 4,
+    "brand": "AMD",
+    "name": "AMD Ryzen 5 3600",
+    "generation": "Zen 2",
+    "cores": 6,
+    "threads": 12
+  },
+  {
+    "id": 5,
+    "brand": "AMD",
+    "name": "AMD Ryzen 5 5600G",
+    "generation": "Zen 3",
+    "cores": 6,
+    "threads": 12
+  }
+]
