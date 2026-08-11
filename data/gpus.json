@@ -1,0 +1,282 @@
+[
+  {
+    "id": 1,
+    "brand": "NVIDIA",
+    "name": "256MB Video Memory",
+    "vram": 1,
+    "performance": 50
+  },
+  {
+    "id": 2,
+    "brand": "AMD",
+    "name": "AMD RX 460",
+    "vram": 1,
+    "performance": 55
+  },
+  {
+    "id": 3,
+    "brand": "NVIDIA",
+    "name": "NVIDIA 6600",
+    "vram": 1,
+    "performance": 20
+  },
+  {
+    "id": 4,
+    "brand": "NVIDIA",
+    "name": "NVIDIA 7900 256MB",
+    "vram": 1,
+    "performance": 20
+  },
+  {
+    "id": 5,
+    "brand": "NVIDIA",
+    "name": "NVIDIA 8600 GT",
+    "vram": 1,
+    "performance": 20
+  },
+  {
+    "id": 6,
+    "brand": "NVIDIA",
+    "name": "NVIDIA 9800 GT",
+    "vram": 1,
+    "performance": 30
+  },
+  {
+    "id": 7,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTS 450",
+    "vram": 1,
+    "performance": 30
+  },
+  {
+    "id": 8,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 1050 4GB",
+    "vram": 4,
+    "performance": 78
+  },
+  {
+    "id": 9,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 1050 Ti",
+    "vram": 1,
+    "performance": 78
+  },
+  {
+    "id": 10,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 1060",
+    "vram": 1,
+    "performance": 85
+  },
+  {
+    "id": 11,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 1060 3GB",
+    "vram": 3,
+    "performance": 85
+  },
+  {
+    "id": 12,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 1060 6GB",
+    "vram": 6,
+    "performance": 85
+  },
+  {
+    "id": 13,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 1070",
+    "vram": 1,
+    "performance": 100
+  },
+  {
+    "id": 14,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 1080",
+    "vram": 1,
+    "performance": 100
+  },
+  {
+    "id": 15,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 1080 Ti",
+    "vram": 1,
+    "performance": 100
+  },
+  {
+    "id": 16,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 1660",
+    "vram": 1,
+    "performance": 100
+  },
+  {
+    "id": 17,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 460",
+    "vram": 1,
+    "performance": 35
+  },
+  {
+    "id": 18,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 470",
+    "vram": 1,
+    "performance": 50
+  },
+  {
+    "id": 19,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 550 Ti",
+    "vram": 1,
+    "performance": 45
+  },
+  {
+    "id": 20,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 650 Ti",
+    "vram": 1,
+    "performance": 55
+  },
+  {
+    "id": 21,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 660",
+    "vram": 1,
+    "performance": 55
+  },
+  {
+    "id": 22,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 670",
+    "vram": 1,
+    "performance": 50
+  },
+  {
+    "id": 23,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 680",
+    "vram": 1,
+    "performance": 50
+  },
+  {
+    "id": 24,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 750",
+    "vram": 1,
+    "performance": 60
+  },
+  {
+    "id": 25,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 750 Ti",
+    "vram": 1,
+    "performance": 60
+  },
+  {
+    "id": 26,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 760",
+    "vram": 1,
+    "performance": 55
+  },
+  {
+    "id": 27,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 770",
+    "vram": 1,
+    "performance": 50
+  },
+  {
+    "id": 28,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 780",
+    "vram": 1,
+    "performance": 75
+  },
+  {
+    "id": 29,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 950",
+    "vram": 1,
+    "performance": 65
+  },
+  {
+    "id": 30,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 960",
+    "vram": 1,
+    "performance": 65
+  },
+  {
+    "id": 31,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 960 4GB",
+    "vram": 4,
+    "performance": 65
+  },
+  {
+    "id": 32,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GTX 970",
+    "vram": 1,
+    "performance": 75
+  },
+  {
+    "id": 33,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GeForce 6600",
+    "vram": 1,
+    "performance": 20
+  },
+  {
+    "id": 34,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GeForce 7600",
+    "vram": 1,
+    "performance": 20
+  },
+  {
+    "id": 35,
+    "brand": "NVIDIA",
+    "name": "NVIDIA GeForce 8600 GT",
+    "vram": 1,
+    "performance": 20
+  },
+  {
+    "id": 36,
+    "brand": "NVIDIA",
+    "name": "NVIDIA RTX 2060",
+    "vram": 1,
+    "performance": 105
+  },
+  {
+    "id": 37,
+    "brand": "NVIDIA",
+    "name": "NVIDIA RTX 2070",
+    "vram": 1,
+    "performance": 115
+  },
+  {
+    "id": 38,
+    "brand": "NVIDIA",
+    "name": "NVIDIA RTX 2070 Super",
+    "vram": 1,
+    "performance": 115
+  },
+  {
+    "id": 39,
+    "brand": "NVIDIA",
+    "name": "NVIDIA RTX 3060",
+    "vram": 1,
+    "performance": 130
+  },
+  {
+    "id": 40,
+    "brand": "NVIDIA",
+    "name": "Shader Model 2.0 GPU",
+    "vram": 1,
+    "performance": 50
+  }
+]
