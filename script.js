@@ -1,6 +1,5 @@
 /* =========================================
    RUNMYGAME
-   LOCAL DATABASE VERSION
    ========================================= */
 
 
@@ -8,47 +7,45 @@ let games = [];
 let cpus = [];
 let gpus = [];
 
-let selectedGame = null;
 let selectedCPU = null;
 let selectedGPU = null;
+let selectedGame = null;
 
 
 /* =========================================
-   DOM
+   ELEMENTS
    ========================================= */
 
-const cpuSearch =
-    document.getElementById("cpuSearch");
+const cpuInput =
+    document.getElementById("cpuInput");
 
-const gpuSearch =
-    document.getElementById("gpuSearch");
+const gpuInput =
+    document.getElementById("gpuInput");
 
-const gameSearch =
-    document.getElementById("gameSearch");
+const gameInput =
+    document.getElementById("gameInput");
 
-const cpuSuggestions =
-    document.getElementById("cpuSuggestions");
 
-const gpuSuggestions =
-    document.getElementById("gpuSuggestions");
+const cpuResults =
+    document.getElementById("cpuResults");
 
-const gameSuggestions =
-    document.getElementById("gameSuggestions");
+const gpuResults =
+    document.getElementById("gpuResults");
 
-const selectedGameBox =
-    document.getElementById("selectedGame");
+const gameResults =
+    document.getElementById("gameResults");
 
-const gamesGrid =
-    document.getElementById("gamesGrid");
 
-const libraryInput =
-    document.getElementById("libraryInput");
+const selectedCPUBox =
+    document.getElementById("selectedCPU");
 
-const checkBtn =
-    document.getElementById("checkBtn");
+const selectedGPUBox =
+    document.getElementById("selectedGPU");
 
-const savePC =
-    document.getElementById("savePC");
+
+const gameSelected =
+    document.getElementById("gameSelected");
+
 
 const ram =
     document.getElementById("ram");
@@ -56,103 +53,131 @@ const ram =
 const vram =
     document.getElementById("vram");
 
+
+const gamesGrid =
+    document.getElementById("gamesGrid");
+
+const librarySearch =
+    document.getElementById("librarySearch");
+
+
+const checkBtn =
+    document.getElementById("checkBtn");
+
+const savePC =
+    document.getElementById("savePC");
+
+
 const result =
     document.getElementById("result");
 
+const requirementsBox =
+    document.getElementById("requirementsBox");
+
 const comparison =
     document.getElementById("comparison");
-
-const comparisonRows =
-    document.getElementById("comparisonRows");
-
-const modal =
-    document.getElementById("modal");
-
-const modalBg =
-    document.getElementById("modalBg");
-
-const closeModal =
-    document.getElementById("closeModal");
-
-const modalCheck =
-    document.getElementById("modalCheck");
-
-const themeBtn =
-    document.getElementById("themeBtn");
-
-const menuBtn =
-    document.getElementById("menuBtn");
-
-const nav =
-    document.getElementById("nav");
 
 
 /* =========================================
    LOAD DATABASE
    ========================================= */
 
-async function loadDatabase() {
+async function loadData() {
 
     try {
 
-        const [
-            gamesResponse,
-            cpusResponse,
-            gpusResponse
-        ] = await Promise.all([
-
-            fetch("data/games.json"),
-
-            fetch("data/cpus.json"),
-
-            fetch("data/gpus.json")
-
-        ]);
+        console.log("Loading database...");
 
 
-        if (
-            !gamesResponse.ok ||
-            !cpusResponse.ok ||
-            !gpusResponse.ok
-        ) {
+        const gamesResponse =
+            await fetch("./data/games.json");
 
+
+        const cpusResponse =
+            await fetch("./data/cpus.json");
+
+
+        const gpusResponse =
+            await fetch("./data/gpus.json");
+
+
+        if (!gamesResponse.ok) {
             throw new Error(
-                "Database files could not be loaded."
+                "games.json not found"
             );
+        }
 
+
+        if (!cpusResponse.ok) {
+            throw new Error(
+                "cpus.json not found"
+            );
+        }
+
+
+        if (!gpusResponse.ok) {
+            throw new Error(
+                "gpus.json not found"
+            );
         }
 
 
         games =
             await gamesResponse.json();
 
+
         cpus =
             await cpusResponse.json();
+
 
         gpus =
             await gpusResponse.json();
 
 
-        renderGames(games);
-
         console.log(
-            `Loaded ${games.length} games, ${cpus.length} CPUs, ${gpus.length} GPUs`
+            "Games:",
+            games.length
         );
 
 
-    } catch (error) {
+        console.log(
+            "CPUs:",
+            cpus.length
+        );
 
-        console.error(error);
+
+        console.log(
+            "GPUs:",
+            gpus.length
+        );
+
+
+        renderGames(games);
+
+
+        console.log(
+            "RunMyGame database loaded!"
+        );
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Database error:",
+            error
+        );
+
 
         gamesGrid.innerHTML = `
-            <div class="empty">
-                <i class="fa-solid fa-triangle-exclamation"></i>
 
-                <p>
-                    Database could not be loaded.
-                    Run the website through a local server.
-                </p>
+            <div class="no-result">
+
+                Database could not be loaded.
+
             </div>
+
         `;
 
     }
@@ -161,30 +186,33 @@ async function loadDatabase() {
 
 
 /* =========================================
-   SEARCH HELPER
+   SEARCH FUNCTION
    ========================================= */
 
-function setupSearch(
+function searchDatabase(
     input,
-    box,
-    data,
-    type
+    resultBox,
+    database,
+    selectFunction
 ) {
 
     input.addEventListener(
         "input",
-        () => {
+        function () {
 
-            const query =
-                input.value
+            const search =
+                this.value
                     .trim()
                     .toLowerCase();
 
 
-            if (!query) {
+            resultBox.innerHTML = "";
 
-                box.classList.remove(
-                    "active"
+
+            if (!search) {
+
+                resultBox.classList.remove(
+                    "show"
                 );
 
                 return;
@@ -192,37 +220,45 @@ function setupSearch(
             }
 
 
-            const results =
-                data
-                    .filter(item =>
-                        item.name
+            const matches =
+                database
+                    .filter(item => {
+
+                        if (!item.name) {
+                            return false;
+                        }
+
+
+                        return item.name
                             .toLowerCase()
-                            .includes(query)
-                    )
-                    .slice(0, 10);
+                            .includes(search);
+
+                    })
+                    .slice(0, 12);
 
 
-            box.innerHTML = "";
+            if (!matches.length) {
 
+                resultBox.innerHTML = `
 
-            if (!results.length) {
-
-                box.innerHTML = `
-                    <div class="suggestion">
+                    <div class="no-result">
                         No results found
                     </div>
+
                 `;
 
-                box.classList.add(
-                    "active"
+
+                resultBox.classList.add(
+                    "show"
                 );
+
 
                 return;
 
             }
 
 
-            results.forEach(item => {
+            matches.forEach(item => {
 
                 const div =
                     document.createElement(
@@ -231,7 +267,7 @@ function setupSearch(
 
 
                 div.className =
-                    "suggestion";
+                    "result-item";
 
 
                 div.textContent =
@@ -240,74 +276,29 @@ function setupSearch(
 
                 div.addEventListener(
                     "click",
-                    () => {
+                    function () {
 
-                        input.value =
-                            item.name;
+                        selectFunction(item);
 
 
-                        box.classList.remove(
-                            "active"
+                        resultBox.classList.remove(
+                            "show"
                         );
-
-
-                        if (type === "cpu") {
-
-                            selectedCPU =
-                                item;
-
-                            updateHero();
-
-                        }
-
-
-                        if (type === "gpu") {
-
-                            selectedGPU =
-                                item;
-
-                            updateHero();
-
-                        }
-
-
-                        if (type === "game") {
-
-                            selectGame(item);
-
-                        }
 
                     }
                 );
 
 
-                box.appendChild(div);
+                resultBox.appendChild(
+                    div
+                );
 
             });
 
 
-            box.classList.add(
-                "active"
+            resultBox.classList.add(
+                "show"
             );
-
-        }
-    );
-
-
-    document.addEventListener(
-        "click",
-        event => {
-
-            if (
-                !input.contains(event.target) &&
-                !box.contains(event.target)
-            ) {
-
-                box.classList.remove(
-                    "active"
-                );
-
-            }
 
         }
     );
@@ -316,31 +307,93 @@ function setupSearch(
 
 
 /* =========================================
-   SEARCH SETUP
+   CPU SEARCH
    ========================================= */
 
-setupSearch(
-    cpuSearch,
-    cpuSuggestions,
+searchDatabase(
+    cpuInput,
+    cpuResults,
     cpus,
-    "cpu"
+    selectCPU
 );
 
 
-setupSearch(
-    gpuSearch,
-    gpuSuggestions,
+/* =========================================
+   GPU SEARCH
+   ========================================= */
+
+searchDatabase(
+    gpuInput,
+    gpuResults,
     gpus,
-    "gpu"
+    selectGPU
 );
 
 
-setupSearch(
-    gameSearch,
-    gameSuggestions,
+/* =========================================
+   GAME SEARCH
+   ========================================= */
+
+searchDatabase(
+    gameInput,
+    gameResults,
     games,
-    "game"
+    selectGame
 );
+
+
+/* =========================================
+   SELECT CPU
+   ========================================= */
+
+function selectCPU(cpu) {
+
+    selectedCPU =
+        cpu;
+
+
+    cpuInput.value =
+        cpu.name;
+
+
+    selectedCPUBox.textContent =
+        "✓ " + cpu.name;
+
+
+    selectedCPUBox.style.color =
+        "var(--green)";
+
+
+    updatePCPreview();
+
+}
+
+
+/* =========================================
+   SELECT GPU
+   ========================================= */
+
+function selectGPU(gpu) {
+
+    selectedGPU =
+        gpu;
+
+
+    gpuInput.value =
+        gpu.name;
+
+
+    selectedGPUBox.textContent =
+        "✓ " + gpu.name;
+
+
+    selectedGPUBox.style.color =
+        "var(--green)";
+
+
+    updatePCPreview();
+
+}
 
 
 /* =========================================
@@ -353,30 +406,42 @@ function selectGame(game) {
         game;
 
 
-    selectedGameBox.innerHTML = `
+    gameInput.value =
+        game.name;
+
+
+    const image =
+        game.image || "";
+
+
+    gameSelected.innerHTML = `
 
         <div class="selected-game-content">
 
             <img
-                src="${game.image}"
+                src="${image}"
                 alt="${escapeHTML(game.name)}"
+                onerror="this.style.opacity='0'"
             >
 
-            <div>
+            <div class="selected-game-info">
 
                 <h3>
                     ${escapeHTML(game.name)}
                 </h3>
 
                 <p>
-                    ${game.year}
-                    •
-                    ${escapeHTML(game.genre)}
+                    ${game.year || ""}
                 </p>
 
                 <p>
-                    Game selected.
-                    Click CHECK MY PC below.
+                    ${escapeHTML(
+                        game.genre || "PC Game"
+                    )}
+                </p>
+
+                <p>
+                    Game selected ✓
                 </p>
 
             </div>
@@ -386,61 +451,101 @@ function selectGame(game) {
     `;
 
 
-    updateHero();
-
-
-    document
-        .getElementById("checker")
-        .scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
+    updatePCPreview();
 
 }
 
 
 /* =========================================
-   HERO UPDATE
+   PC PREVIEW
    ========================================= */
 
-function updateHero() {
+function updatePCPreview() {
 
-    document.getElementById(
-        "heroPcName"
-    ).textContent =
-        selectedCPU && selectedGPU
-            ? "Gaming PC"
-            : "Not configured";
+    const heroCPU =
+        document.getElementById(
+            "heroCPU"
+        );
 
 
-    document.getElementById(
-        "heroCpu"
-    ).textContent =
+    const heroGPU =
+        document.getElementById(
+            "heroGPU"
+        );
+
+
+    const heroRAM =
+        document.getElementById(
+            "heroRAM"
+        );
+
+
+    const heroVRAM =
+        document.getElementById(
+            "heroVRAM"
+        );
+
+
+    const pcStatus =
+        document.getElementById(
+            "pcStatus"
+        );
+
+
+    heroCPU.textContent =
         selectedCPU
             ? selectedCPU.name
             : "Not set";
 
 
-    document.getElementById(
-        "heroGpu"
-    ).textContent =
+    heroGPU.textContent =
         selectedGPU
             ? selectedGPU.name
             : "Not set";
 
 
-    document.getElementById(
-        "heroRam"
-    ).textContent =
-        `${ram.value} GB`;
+    heroRAM.textContent =
+        ram.value + " GB";
 
 
-    document.getElementById(
-        "heroVram"
-    ).textContent =
-        `${vram.value} GB`;
+    heroVRAM.textContent =
+        vram.value + " GB";
+
+
+    if (
+        selectedCPU &&
+        selectedGPU
+    ) {
+
+        pcStatus.textContent =
+            "Gaming PC";
+
+    }
+
+    else {
+
+        pcStatus.textContent =
+            "Not configured";
+
+    }
 
 }
+
+
+/* =========================================
+   RAM / VRAM CHANGE
+   ========================================= */
+
+ram.addEventListener(
+    "change",
+    updatePCPreview
+);
+
+
+vram.addEventListener(
+    "change",
+    updatePCPreview
+);
 
 
 /* =========================================
@@ -449,15 +554,23 @@ function updateHero() {
 
 savePC.addEventListener(
     "click",
-    () => {
+    function () {
 
-        if (
-            !selectedCPU ||
-            !selectedGPU
-        ) {
+        if (!selectedCPU) {
 
             alert(
-                "Please select your CPU and GPU first."
+                "Please select a CPU."
+            );
+
+            return;
+
+        }
+
+
+        if (!selectedGPU) {
+
+            alert(
+                "Please select a GPU."
             );
 
             return;
@@ -467,11 +580,9 @@ savePC.addEventListener(
 
         const pc = {
 
-            cpu:
-                selectedCPU,
+            cpu: selectedCPU,
 
-            gpu:
-                selectedGPU,
+            gpu: selectedGPU,
 
             ram:
                 Number(ram.value),
@@ -489,68 +600,11 @@ savePC.addEventListener(
 
 
         alert(
-            "Your PC has been saved."
+            "Your PC has been saved!"
         );
 
     }
 );
-
-
-/* =========================================
-   LOAD SAVED PC
-   ========================================= */
-
-function loadSavedPC() {
-
-    const saved =
-        localStorage.getItem(
-            "runmygamePC"
-        );
-
-
-    if (!saved)
-        return;
-
-
-    try {
-
-        const pc =
-            JSON.parse(saved);
-
-
-        selectedCPU =
-            pc.cpu;
-
-        selectedGPU =
-            pc.gpu;
-
-
-        ram.value =
-            pc.ram;
-
-
-        vram.value =
-            pc.vram;
-
-
-        cpuSearch.value =
-            selectedCPU.name;
-
-
-        gpuSearch.value =
-            selectedGPU.name;
-
-
-        updateHero();
-
-
-    } catch (error) {
-
-        console.error(error);
-
-    }
-
-}
 
 
 /* =========================================
@@ -559,12 +613,34 @@ function loadSavedPC() {
 
 checkBtn.addEventListener(
     "click",
-    () => {
+    function () {
+
+        if (!selectedCPU) {
+
+            alert(
+                "Select your CPU first."
+            );
+
+            return;
+
+        }
+
+
+        if (!selectedGPU) {
+
+            alert(
+                "Select your GPU first."
+            );
+
+            return;
+
+        }
+
 
         if (!selectedGame) {
 
             alert(
-                "Please select a game first."
+                "Select a game first."
             );
 
             return;
@@ -572,38 +648,24 @@ checkBtn.addEventListener(
         }
 
 
-        if (
-            !selectedCPU ||
-            !selectedGPU
-        ) {
-
-            alert(
-                "Please select your CPU and GPU."
-            );
-
-            return;
-
-        }
-
-
-        checkPerformance();
+        checkGame();
 
     }
 );
 
 
 /* =========================================
-   PERFORMANCE CHECK
+   CHECK GAME
    ========================================= */
 
-function checkPerformance() {
+function checkGame() {
 
     const minimum =
-        selectedGame.minimum;
+        selectedGame.minimum || {};
 
 
     const recommended =
-        selectedGame.recommended;
+        selectedGame.recommended || {};
 
 
     const userRAM =
@@ -614,10 +676,6 @@ function checkPerformance() {
         Number(vram.value);
 
 
-    /*
-       CPU score
-    */
-
     const cpuScore =
         compareCPU(
             selectedCPU,
@@ -625,10 +683,6 @@ function checkPerformance() {
             recommended.cpu
         );
 
-
-    /*
-       GPU score
-    */
 
     const gpuScore =
         compareGPU(
@@ -639,22 +693,22 @@ function checkPerformance() {
 
 
     const ramScore =
-        userRAM >= recommended.ram
-            ? 100
-            : userRAM >= minimum.ram
-                ? 70
-                : 30;
+        compareMemory(
+            userRAM,
+            Number(minimum.ram || 4),
+            Number(recommended.ram || 8)
+        );
 
 
     const vramScore =
-        userVRAM >= recommended.vram
-            ? 100
-            : userVRAM >= minimum.vram
-                ? 70
-                : 30;
+        compareMemory(
+            userVRAM,
+            Number(minimum.vram || 1),
+            Number(recommended.vram || 2)
+        );
 
 
-    const score =
+    const total =
         (
             cpuScore * .30 +
             gpuScore * .40 +
@@ -666,13 +720,13 @@ function checkPerformance() {
     let status;
 
 
-    if (score >= 85) {
+    if (total >= 85) {
 
         status = "good";
 
     }
 
-    else if (score >= 65) {
+    else if (total >= 65) {
 
         status = "playable";
 
@@ -680,14 +734,14 @@ function checkPerformance() {
 
     else {
 
-        status = "danger";
+        status = "bad";
 
     }
 
 
     showResult(
         status,
-        score,
+        total,
         cpuScore,
         gpuScore,
         ramScore,
@@ -702,53 +756,50 @@ function checkPerformance() {
    ========================================= */
 
 function compareCPU(
-    userCPU,
-    minimumCPU,
-    recommendedCPU
+    user,
+    minimumName,
+    recommendedName
 ) {
 
     const userScore =
-        getCPUScore(
-            userCPU
+        getCPUScore(user);
+
+
+    const minimum =
+        findCPU(
+            minimumName
         );
 
 
-    const minScore =
-        findDatabaseScore(
-            minimumCPU,
-            cpus
+    const recommended =
+        findCPU(
+            recommendedName
         );
 
 
-    const recScore =
-        findDatabaseScore(
-            recommendedCPU,
-            cpus
-        );
-
-
-    if (
-        minScore === null ||
-        recScore === null
-    ) {
+    if (!minimum || !recommended) {
 
         return 70;
 
     }
 
 
-    if (
-        userScore >= recScore
-    ) {
+    const minScore =
+        getCPUScore(minimum);
+
+
+    const recScore =
+        getCPUScore(recommended);
+
+
+    if (userScore >= recScore) {
 
         return 100;
 
     }
 
 
-    if (
-        userScore >= minScore
-    ) {
+    if (userScore >= minScore) {
 
         return 70;
 
@@ -765,53 +816,50 @@ function compareCPU(
    ========================================= */
 
 function compareGPU(
-    userGPU,
-    minimumGPU,
-    recommendedGPU
+    user,
+    minimumName,
+    recommendedName
 ) {
 
     const userScore =
-        getGPUScore(
-            userGPU
+        getGPUScore(user);
+
+
+    const minimum =
+        findGPU(
+            minimumName
         );
 
 
-    const minScore =
-        findDatabaseScore(
-            minimumGPU,
-            gpus
+    const recommended =
+        findGPU(
+            recommendedName
         );
 
 
-    const recScore =
-        findDatabaseScore(
-            recommendedGPU,
-            gpus
-        );
-
-
-    if (
-        minScore === null ||
-        recScore === null
-    ) {
+    if (!minimum || !recommended) {
 
         return 70;
 
     }
 
 
-    if (
-        userScore >= recScore
-    ) {
+    const minScore =
+        getGPUScore(minimum);
+
+
+    const recScore =
+        getGPUScore(recommended);
+
+
+    if (userScore >= recScore) {
 
         return 100;
 
     }
 
 
-    if (
-        userScore >= minScore
-    ) {
+    if (userScore >= minScore) {
 
         return 70;
 
@@ -824,87 +872,209 @@ function compareGPU(
 
 
 /* =========================================
-   DATABASE SCORE
+   MEMORY
+   ========================================= */
+
+function compareMemory(
+    user,
+    minimum,
+    recommended
+) {
+
+    if (user >= recommended) {
+
+        return 100;
+
+    }
+
+
+    if (user >= minimum) {
+
+        return 70;
+
+    }
+
+
+    return 25;
+
+}
+
+
+/* =========================================
+   CPU SCORE
    ========================================= */
 
 function getCPUScore(cpu) {
 
-    return Number(
-        cpu.performance ||
-        (
-            cpu.cores *
-            cpu.threads
-        )
-    );
-
-}
+    if (!cpu) {
+        return 0;
+    }
 
 
-function getGPUScore(gpu) {
+    if (
+        cpu.performance !== undefined
+    ) {
 
-    return Number(
-        gpu.performance ||
-        (
-            gpu.vram * 100
-        )
-    );
+        return Number(
+            cpu.performance
+        );
 
-}
-
-
-/* =========================================
-   FIND REQUIREMENT
-   ========================================= */
-
-function findDatabaseScore(
-    requirement,
-    database
-) {
-
-    if (!requirement)
-        return null;
+    }
 
 
-    const req =
-        requirement
-            .toLowerCase();
+    const cores =
+        Number(cpu.cores || 2);
 
 
-    const item =
-        database.find(
-            element =>
-                element.name
-                    .toLowerCase()
-                    .includes(
-                        req
-                    ) ||
-                req.includes(
-                    element.name
-                        .toLowerCase()
-                )
+    const threads =
+        Number(
+            cpu.threads ||
+            cores
         );
 
 
-    if (!item)
-        return null;
-
-
-    return database === cpus
-        ? getCPUScore(item)
-        : getGPUScore(item);
+    return (
+        cores * 100 +
+        threads * 50
+    );
 
 }
 
 
 /* =========================================
-   RESULT
+   GPU SCORE
+   ========================================= */
+
+function getGPUScore(gpu) {
+
+    if (!gpu) {
+        return 0;
+    }
+
+
+    if (
+        gpu.performance !== undefined
+    ) {
+
+        return Number(
+            gpu.performance
+        );
+
+    }
+
+
+    return (
+        Number(gpu.vram || 1) * 100
+    );
+
+}
+
+
+/* =========================================
+   FIND CPU
+   ========================================= */
+
+function findCPU(name) {
+
+    if (!name) {
+        return null;
+    }
+
+
+    const search =
+        name
+            .toLowerCase()
+            .trim();
+
+
+    let found =
+        cpus.find(
+            cpu =>
+                cpu.name
+                    .toLowerCase()
+                    .trim() === search
+        );
+
+
+    if (!found) {
+
+        found =
+            cpus.find(
+                cpu =>
+                    cpu.name
+                        .toLowerCase()
+                        .includes(search) ||
+                    search.includes(
+                        cpu.name
+                            .toLowerCase()
+                    )
+            );
+
+    }
+
+
+    return found || null;
+
+}
+
+
+/* =========================================
+   FIND GPU
+   ========================================= */
+
+function findGPU(name) {
+
+    if (!name) {
+        return null;
+    }
+
+
+    const search =
+        name
+            .toLowerCase()
+            .trim();
+
+
+    let found =
+        gpus.find(
+            gpu =>
+                gpu.name
+                    .toLowerCase()
+                    .trim() === search
+        );
+
+
+    if (!found) {
+
+        found =
+            gpus.find(
+                gpu =>
+                    gpu.name
+                        .toLowerCase()
+                        .includes(search) ||
+                    search.includes(
+                        gpu.name
+                            .toLowerCase()
+                    )
+            );
+
+    }
+
+
+    return found || null;
+
+}
+
+
+/* =========================================
+   SHOW RESULT
    ========================================= */
 
 function showResult(
     status,
     score,
-    cpuScore,
-    gpuScore,
+    cpu,
+    gpu,
     ramScore,
     vramScore
 ) {
@@ -913,13 +1083,13 @@ function showResult(
         "result";
 
 
-    result.classList.add(
-        status
+    result.classList.remove(
+        "hidden"
     );
 
 
-    result.classList.remove(
-        "hidden"
+    result.classList.add(
+        status
     );
 
 
@@ -935,9 +1105,9 @@ function showResult(
         );
 
 
-    const text =
+    const message =
         document.getElementById(
-            "resultText"
+            "resultMessage"
         );
 
 
@@ -946,81 +1116,61 @@ function showResult(
         icon.innerHTML =
             '<i class="fa-solid fa-circle-check"></i>';
 
+
         title.textContent =
             "Your PC Can Run It";
 
-        text.textContent =
-            "Your selected hardware meets or exceeds the available requirements.";
+
+        message.textContent =
+            "Your hardware meets the recommended requirements.";
 
     }
+
 
     else if (status === "playable") {
 
         icon.innerHTML =
             '<i class="fa-solid fa-check"></i>';
 
+
         title.textContent =
             "Likely Playable";
 
-        text.textContent =
-            "Your PC should be able to run this game, but lower settings may be needed.";
+
+        message.textContent =
+            "Your PC should run this game. You may need lower graphics settings.";
 
     }
+
 
     else {
 
         icon.innerHTML =
             '<i class="fa-solid fa-xmark"></i>';
 
+
         title.textContent =
             "Not Recommended";
 
-        text.textContent =
-            "One or more major components are below the game's minimum requirements.";
+
+        message.textContent =
+            "Your hardware may be below the game's minimum requirements.";
 
     }
-
-
-    const estimatedFPS =
-        calculateFPS(
-            score
-        );
 
 
     document.getElementById(
         "fps"
     ).textContent =
-        estimatedFPS;
+        estimateFPS(score);
 
 
-    comparison.classList.remove(
-        "hidden"
+    showComparison(
+        cpu,
+        gpu,
+        ramScore,
+        vramScore
     );
-
-
-    comparisonRows.innerHTML = `
-
-        ${createCompareRow(
-            "CPU",
-            cpuScore
-        )}
-
-        ${createCompareRow(
-            "GPU",
-            gpuScore
-        )}
-
-        ${createCompareRow(
-            "RAM",
-            ramScore
-        )}
-
-        ${createCompareRow(
-            "VRAM",
-            vramScore
-        )}
-
-    `;
 
 
     result.scrollIntoView({
@@ -1032,31 +1182,104 @@ function showResult(
 
 
 /* =========================================
+   FPS
+   ========================================= */
+
+function estimateFPS(score) {
+
+    if (score >= 95)
+        return 80;
+
+
+    if (score >= 85)
+        return 65;
+
+
+    if (score >= 75)
+        return 55;
+
+
+    if (score >= 65)
+        return 45;
+
+
+    if (score >= 50)
+        return 30;
+
+
+    return 20;
+
+}
+
+
+/* =========================================
+   COMPARISON
+   ========================================= */
+
+function showComparison(
+    cpu,
+    gpu,
+    ramScore,
+    vramScore
+) {
+
+    requirementsBox.classList.remove(
+        "hidden"
+    );
+
+
+    comparison.innerHTML = `
+
+        ${comparisonRow(
+            "CPU",
+            cpu
+        )}
+
+        ${comparisonRow(
+            "GPU",
+            gpu
+        )}
+
+        ${comparisonRow(
+            "RAM",
+            ramScore
+        )}
+
+        ${comparisonRow(
+            "VRAM",
+            vramScore
+        )}
+
+    `;
+
+}
+
+
+/* =========================================
    COMPARISON ROW
    ========================================= */
 
-function createCompareRow(
+function comparisonRow(
     name,
     score
 ) {
 
-    const good =
+    const pass =
         score >= 70;
 
 
     return `
 
-        <div class="compare-row">
+        <div class="requirement-row">
 
             <span>
                 ${name}
             </span>
 
             <strong
-                class="${good ? "good" : "bad"}">
-
-                ${good ? "PASS" : "BELOW"}
-
+                class="${pass ? "pass" : "fail"}"
+            >
+                ${pass ? "PASS" : "BELOW"}
             </strong>
 
             <span>
@@ -1071,44 +1294,7 @@ function createCompareRow(
 
 
 /* =========================================
-   FPS
-   ========================================= */
-
-function calculateFPS(score) {
-
-    if (score >= 95)
-        return 80;
-
-    if (score >= 85)
-        return 65;
-
-    if (score >= 75)
-        return 55;
-
-    if (score >= 65)
-        return 45;
-
-    if (score >= 50)
-        return 30;
-
-    return 20;
-
-}
-
-
-/*
-    NOTE:
-
-    FPS is an estimate.
-
-    Exact FPS requires real benchmark
-    data for the specific CPU + GPU +
-    game + resolution + graphics settings.
-*/
-
-
-/* =========================================
-   RENDER GAMES
+   GAME LIBRARY
    ========================================= */
 
 function renderGames(list) {
@@ -1119,9 +1305,11 @@ function renderGames(list) {
     if (!list.length) {
 
         gamesGrid.innerHTML = `
-            <div class="empty">
+
+            <div class="no-result">
                 No games found.
             </div>
+
         `;
 
         return;
@@ -1133,7 +1321,7 @@ function renderGames(list) {
 
         const card =
             document.createElement(
-                "article"
+                "div"
             );
 
 
@@ -1144,10 +1332,12 @@ function renderGames(list) {
         card.innerHTML = `
 
             <img
-                src="${game.image}"
+                src="${game.image || ""}"
                 alt="${escapeHTML(game.name)}"
                 loading="lazy"
+                onerror="this.style.opacity='0'"
             >
+
 
             <div class="game-card-content">
 
@@ -1156,10 +1346,17 @@ function renderGames(list) {
                 </h3>
 
                 <p>
-                    ${game.year}
-                    •
-                    ${escapeHTML(game.genre)}
+                    ${game.year || ""}
+                    ${
+                        game.genre
+                            ? " • " +
+                              escapeHTML(
+                                  game.genre
+                              )
+                            : ""
+                    }
                 </p>
+
 
                 <button>
                     View Requirements
@@ -1174,7 +1371,11 @@ function renderGames(list) {
             .querySelector("button")
             .addEventListener(
                 "click",
-                () => openGameModal(game)
+                function () {
+
+                    openModal(game);
+
+                }
             );
 
 
@@ -1191,14 +1392,14 @@ function renderGames(list) {
    LIBRARY SEARCH
    ========================================= */
 
-libraryInput.addEventListener(
+librarySearch.addEventListener(
     "input",
-    () => {
+    function () {
 
-        const query =
-            libraryInput.value
-                .toLowerCase()
-                .trim();
+        const search =
+            this.value
+                .trim()
+                .toLowerCase();
 
 
         const filtered =
@@ -1206,7 +1407,7 @@ libraryInput.addEventListener(
                 game =>
                     game.name
                         .toLowerCase()
-                        .includes(query)
+                        .includes(search)
             );
 
 
@@ -1222,12 +1423,16 @@ libraryInput.addEventListener(
    MODAL
    ========================================= */
 
-function openGameModal(game) {
+function openModal(game) {
+
+    selectedGame =
+        game;
+
 
     document.getElementById(
         "modalImage"
     ).src =
-        game.image;
+        game.image || "";
 
 
     document.getElementById(
@@ -1237,58 +1442,80 @@ function openGameModal(game) {
 
 
     document.getElementById(
-        "modalGenre"
+        "modalMeta"
     ).textContent =
-        `${game.year} • ${game.genre}`;
+        `${game.year || ""} • ${game.genre || "PC Game"}`;
+
+
+    const minimum =
+        game.minimum || {};
+
+
+    const recommended =
+        game.recommended || {};
 
 
     document.getElementById(
-        "modalDescription"
-    ).textContent =
-        "PC system requirements for this game.";
-
-
-    document.getElementById(
-        "modalMinimum"
+        "minimumText"
     ).innerHTML = `
 
-        CPU: ${escapeHTML(game.minimum.cpu)}
+        CPU:
+        ${escapeHTML(
+            minimum.cpu || "Unknown"
+        )}
+
         <br>
 
-        GPU: ${escapeHTML(game.minimum.gpu)}
+        GPU:
+        ${escapeHTML(
+            minimum.gpu || "Unknown"
+        )}
+
         <br>
 
-        RAM: ${game.minimum.ram} GB
+        RAM:
+        ${minimum.ram || "?"} GB
+
         <br>
 
-        VRAM: ${game.minimum.vram} GB
+        VRAM:
+        ${minimum.vram || "?"} GB
 
     `;
 
 
     document.getElementById(
-        "modalRecommended"
+        "recommendedText"
     ).innerHTML = `
 
-        CPU: ${escapeHTML(game.recommended.cpu)}
+        CPU:
+        ${escapeHTML(
+            recommended.cpu || "Unknown"
+        )}
+
         <br>
 
-        GPU: ${escapeHTML(game.recommended.gpu)}
+        GPU:
+        ${escapeHTML(
+            recommended.gpu || "Unknown"
+        )}
+
         <br>
 
-        RAM: ${game.recommended.ram} GB
+        RAM:
+        ${recommended.ram || "?"} GB
+
         <br>
 
-        VRAM: ${game.recommended.vram} GB
+        VRAM:
+        ${recommended.vram || "?"} GB
 
     `;
 
 
-    selectedGame =
-        game;
-
-
-    modal.classList.remove(
+    document.getElementById(
+        "modal"
+    ).classList.remove(
         "hidden"
     );
 
@@ -1300,11 +1527,18 @@ function openGameModal(game) {
 }
 
 
-function hideModal() {
+/* =========================================
+   CLOSE MODAL
+   ========================================= */
 
-    modal.classList.add(
+function closeGameModal() {
+
+    document.getElementById(
+        "modal"
+    ).classList.add(
         "hidden"
     );
+
 
     document.body.classList.remove(
         "modal-open"
@@ -1313,26 +1547,35 @@ function hideModal() {
 }
 
 
-closeModal.addEventListener(
+document.getElementById(
+    "closeModal"
+).addEventListener(
     "click",
-    hideModal
+    closeGameModal
 );
 
 
-modalBg.addEventListener(
+document.getElementById(
+    "modalOverlay"
+).addEventListener(
     "click",
-    hideModal
+    closeGameModal
 );
 
 
-modalCheck.addEventListener(
+document.getElementById(
+    "modalCheck"
+).addEventListener(
     "click",
-    () => {
+    function () {
 
-        hideModal();
+        closeGameModal();
+
 
         document
-            .getElementById("checker")
+            .getElementById(
+                "checker"
+            )
             .scrollIntoView({
                 behavior: "smooth"
             });
@@ -1345,9 +1588,11 @@ modalCheck.addEventListener(
    THEME
    ========================================= */
 
-themeBtn.addEventListener(
+document.getElementById(
+    "themeBtn"
+).addEventListener(
     "click",
-    () => {
+    function () {
 
         document.body.classList.toggle(
             "light"
@@ -1361,14 +1606,14 @@ themeBtn.addEventListener(
 
 
         localStorage.setItem(
-            "runmygameTheme",
+            "theme",
             light
                 ? "light"
                 : "dark"
         );
 
 
-        themeBtn.innerHTML =
+        this.innerHTML =
             light
                 ? '<i class="fa-solid fa-sun"></i>'
                 : '<i class="fa-solid fa-moon"></i>';
@@ -1381,12 +1626,66 @@ themeBtn.addEventListener(
    MOBILE MENU
    ========================================= */
 
-menuBtn.addEventListener(
+document.getElementById(
+    "menuBtn"
+).addEventListener(
     "click",
-    () => {
+    function () {
 
-        nav.classList.toggle(
-            "active"
+        document
+            .getElementById(
+                "navigation"
+            )
+            .classList.toggle(
+                "active"
+            );
+
+    }
+);
+
+
+/* =========================================
+   CLOSE SEARCH RESULTS
+   ========================================= */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const boxes = [
+            cpuResults,
+            gpuResults,
+            gameResults
+        ];
+
+
+        const inputs = [
+            cpuInput,
+            gpuInput,
+            gameInput
+        ];
+
+
+        boxes.forEach(
+            (box, index) => {
+
+                if (
+                    !inputs[index]
+                        .contains(
+                            event.target
+                        ) &&
+                    !box.contains(
+                        event.target
+                    )
+                ) {
+
+                    box.classList.remove(
+                        "show"
+                    );
+
+                }
+
+            }
         );
 
     }
@@ -1430,12 +1729,99 @@ function escapeHTML(value) {
 
 
 /* =========================================
+   LOAD SAVED PC
+   ========================================= */
+
+function loadSavedPC() {
+
+    const saved =
+        localStorage.getItem(
+            "runmygamePC"
+        );
+
+
+    if (!saved) {
+
+        updatePCPreview();
+
+        return;
+
+    }
+
+
+    try {
+
+        const pc =
+            JSON.parse(saved);
+
+
+        if (pc.cpu) {
+
+            selectedCPU =
+                pc.cpu;
+
+            cpuInput.value =
+                pc.cpu.name;
+
+            selectedCPUBox.textContent =
+                "✓ " + pc.cpu.name;
+
+        }
+
+
+        if (pc.gpu) {
+
+            selectedGPU =
+                pc.gpu;
+
+            gpuInput.value =
+                pc.gpu.name;
+
+            selectedGPUBox.textContent =
+                "✓ " + pc.gpu.name;
+
+        }
+
+
+        if (pc.ram) {
+
+            ram.value =
+                pc.ram;
+
+        }
+
+
+        if (pc.vram) {
+
+            vram.value =
+                pc.vram;
+
+        }
+
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "No saved PC."
+        );
+
+    }
+
+
+    updatePCPreview();
+
+}
+
+
+/* =========================================
    START
    ========================================= */
 
 const savedTheme =
     localStorage.getItem(
-        "runmygameTheme"
+        "theme"
     );
 
 
@@ -1445,12 +1831,15 @@ if (savedTheme === "light") {
         "light"
     );
 
-    themeBtn.innerHTML =
+
+    document.getElementById(
+        "themeBtn"
+    ).innerHTML =
         '<i class="fa-solid fa-sun"></i>';
 
 }
 
 
-loadDatabase();
+loadData();
 
 loadSavedPC();
