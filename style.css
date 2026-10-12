@@ -80,7 +80,7 @@ select{padding-left:14px;cursor:pointer}
 select option{color:#111}
 input:focus,select:focus{border-color:var(--p);box-shadow:0 0 0 4px rgba(139,92,246,.2)}
 .library-search{max-width:520px;margin:0 auto 30px}
-.results{display:none;margin-top:6px;max-height:240px;overflow:auto;border-radius:12px;border:1px solid var(--line);background:var(--bg)}
+.results{display:none;margin-top:6px;max-height:320px;overflow:auto;border-radius:12px;border:1px solid var(--line);background:var(--bg)}
 .results.show{display:block;animation:rise .25s both}
 .result-item{padding:11px 14px;cursor:pointer;transition:.15s}
 .result-item:hover{background:var(--p);color:#fff;padding-left:20px}

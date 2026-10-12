@@ -55,7 +55,9 @@ function setupSearch(input, box, key, onSelect, opts = {}) {
     };
     const render = () => {
         const q = input.value.trim(), ql = q.toLowerCase(), my = ++token;
-        const list = db[key].filter(i => i.name && i.name.toLowerCase().includes(ql)).slice(0, 8);
+        const list = db[key].filter(i => i.name && i.name.toLowerCase().includes(ql))
+            .sort((a, b) => (b.performance || 0) - (a.performance || 0)) // newest / strongest first
+            .slice(0, opts.max || 300);
         box.innerHTML = "";
         list.forEach(i => box.appendChild(row(i)));
         if (opts.custom && q.length > 1 && !list.some(i => i.name.toLowerCase() === ql))
@@ -114,7 +116,7 @@ setupSearch($("gameInput"), $("gameResults"), "games", async g => {
         catch { return toast("This game has no PC requirements on Steam"); }
     }
     selectGame(g);
-}, { live: steamSearch });
+}, { live: steamSearch, max: 12 });
 
 function markSelected(el, name) {
     el.textContent = "✓ " + name;
