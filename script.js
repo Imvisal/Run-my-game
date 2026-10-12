@@ -41,50 +41,80 @@ async function loadData() {
     }
 }
 
-/* ---------- searchable dropdown ---------- */
-function setupSearch(input, box, key, onSelect) {
+/* ---------- searchable dropdown (local data + optional live search) ---------- */
+function setupSearch(input, box, key, onSelect, opts = {}) {
+    let timer, token = 0;
+    const row = (item, label) => {
+        const d = document.createElement("div");
+        d.className = "result-item";
+        d.textContent = item.name;
+        const t = label || item.brand || item.year;
+        if (t) { const s = document.createElement("small"); s.textContent = t; d.appendChild(s); }
+        d.onclick = () => { onSelect(item); box.classList.remove("show"); };
+        return d;
+    };
     const render = () => {
-        const q = input.value.trim().toLowerCase();
-        const list = db[key].filter(i => i.name && i.name.toLowerCase().includes(q)).slice(0, 12);
-        box.innerHTML = list.length
-            ? ""
-            : `<div class="no-result">${db[key].length ? "No results found" : "Loading database..."}</div>`;
-        list.forEach(item => {
-            const d = document.createElement("div");
-            d.className = "result-item";
-            d.textContent = item.name;
-            if (item.brand || item.year) {
-                const s = document.createElement("small");
-                s.textContent = item.brand || item.year;
-                d.appendChild(s);
-            }
-            d.onclick = () => { onSelect(item); box.classList.remove("show"); };
-            box.appendChild(d);
-        });
+        const q = input.value.trim(), ql = q.toLowerCase(), my = ++token;
+        const list = db[key].filter(i => i.name && i.name.toLowerCase().includes(ql)).slice(0, 8);
+        box.innerHTML = "";
+        list.forEach(i => box.appendChild(row(i)));
+        if (opts.custom && q.length > 1 && !list.some(i => i.name.toLowerCase() === ql))
+            box.appendChild(row({ name: q, custom: true }, "use my own"));
+        if (opts.live && q.length > 1) {
+            const st = document.createElement("div");
+            st.className = "no-result"; st.textContent = "Searching Steam...";
+            box.appendChild(st);
+            clearTimeout(timer);
+            timer = setTimeout(async () => {
+                let found = [];
+                try { found = await opts.live(q); } catch { }
+                if (my !== token) return;
+                st.remove();
+                const have = new Set(list.map(i => i.name.toLowerCase()));
+                found.filter(i => !have.has(i.name.toLowerCase())).forEach(i => box.appendChild(row(i, "Steam")));
+                if (!box.children.length) box.innerHTML = `<div class="no-result">No results found</div>`;
+            }, 350);
+        } else if (!box.children.length) {
+            box.innerHTML = `<div class="no-result">${db[key].length ? "No results found" : "Loading database..."}</div>`;
+        }
         box.classList.add("show");
     };
     input.addEventListener("input", render);
     input.addEventListener("focus", render);
 }
 
+/* live Steam search through the Vercel function in /api/steam.js */
+const steamSearch = q => fetch("/api/steam?q=" + encodeURIComponent(q)).then(r => r.json())
+    .then(d => (d.items || []).map(i => ({ name: i.name, id: i.id, image: i.image, live: true })));
+const steamGame = id => fetch("/api/steam?id=" + id).then(r => { if (!r.ok) throw new Error("no data"); return r.json(); });
+
 setupSearch($("cpuInput"), $("cpuResults"), "cpus", cpu => {
+    if (cpu.custom && cpuPerf(cpu.name) == null)
+        return toast('Could not recognise that CPU. Try e.g. "Ryzen 5 3600" or "Core i5-12400F"');
     selectedCPU = cpu;
     $("cpuInput").value = cpu.name;
     markSelected($("selectedCPU"), cpu.name);
     updatePC();
-});
+}, { custom: true });
+
 setupSearch($("gpuInput"), $("gpuResults"), "gpus", gpu => {
+    if (gpu.custom && gpuPerf(gpu.name) == null)
+        return toast('Could not recognise that GPU. Try e.g. "RTX 4060" or "RX 6600"');
     selectedGPU = gpu;
     $("gpuInput").value = gpu.name;
     markSelected($("selectedGPU"), gpu.name);
+    if (gpu.vram && [...$("vram").options].some(o => +o.value === +gpu.vram)) $("vram").value = gpu.vram;
     updatePC();
-    // auto-fill VRAM from the GPU when the data has it
-    if (gpu.vram && [...$("vram").options].some(o => +o.value === +gpu.vram)) {
-        $("vram").value = gpu.vram;
-        updatePC();
+}, { custom: true });
+
+setupSearch($("gameInput"), $("gameResults"), "games", async g => {
+    if (g.live) {
+        toast("Loading requirements...");
+        try { g = await steamGame(g.id); }
+        catch { return toast("This game has no PC requirements on Steam"); }
     }
-});
-setupSearch($("gameInput"), $("gameResults"), "games", g => selectGame(g));
+    selectGame(g);
+}, { live: steamSearch });
 
 function markSelected(el, name) {
     el.textContent = "✓ " + name;
@@ -134,28 +164,96 @@ $("checkBtn").onclick = () => {
     setTimeout(() => { btn.classList.remove("loading"); checkGame(); }, 700);
 };
 
-const find = (list, name) => {
-    if (!name) return null;
-    const s = name.toLowerCase().trim();
-    return list.find(i => i.name.toLowerCase().trim() === s)
-        || list.find(i => i.name.toLowerCase().includes(s) || s.includes(i.name.toLowerCase())) || null;
+/* ---------- performance estimator (one scale for your PC and the game requirements) ---------- */
+const GPUS = {
+    gt710: 10, gt730: 15, gt1030: 35, gts450: 20, gtx460: 30, gtx470: 45, gtx480: 50, gtx550ti: 30, gtx560: 40, gtx560ti: 45, gtx570: 50, gtx580: 55,
+    gtx650: 35, gtx650ti: 40, gtx660: 55, gtx670: 70, gtx680: 80, gtx750: 45, gtx750ti: 50, gtx760: 65, gtx770: 80, gtx780: 95,
+    gtx950: 65, gtx960: 70, gtx970: 105, gtx980: 125, gtx980ti: 150,
+    gtx1050: 58, gtx1050ti: 70, gtx1060: 100, gtx1070: 145, gtx1070ti: 170, gtx1080: 185, gtx1080ti: 240,
+    gtx1630: 50, gtx1650: 75, gtx1650super: 100, gtx1660: 115, gtx1660super: 125, gtx1660ti: 125,
+    rtx2060: 140, rtx2060super: 165, rtx2070: 175, rtx2070super: 195, rtx2080: 225, rtx2080super: 240, rtx2080ti: 290,
+    rtx3050: 105, rtx3060: 165, rtx3060ti: 215, rtx3070: 250, rtx3070ti: 270, rtx3080: 330, rtx3080ti: 380, rtx3090: 400,
+    rtx4060: 190, rtx4060ti: 230, rtx4070: 290, rtx4070super: 330, rtx4070ti: 370, rtx4080: 420, rtx4090: 600,
+    rtx5060: 230, rtx5060ti: 270, rtx5070: 350, rtx5070ti: 450, rtx5080: 520, rtx5090: 700,
+    rx460: 50, rx470: 85, rx480: 105, rx560: 55, rx570: 95, rx580: 110, rx590: 125, rx5500xt: 95, rx5600xt: 145, rx5700: 185, rx5700xt: 205,
+    rx6500xt: 100, rx6600: 185, rx6600xt: 215, rx6650xt: 225, rx6700xt: 265, rx6800: 340, rx6800xt: 380, rx6900xt: 420,
+    rx7600: 200, rx7600xt: 215, rx7700xt: 290, rx7800xt: 370, rx7900gre: 400, rx7900xt: 480, rx7900xtx: 560, rx9060xt: 260, rx9070: 400, rx9070xt: 470
 };
+const OLD_NV = { 9800: 20, 8800: 25, 8600: 10, 7900: 15, 7600: 12, 6600: 8 };
+const AMD_HD = { 5770: 30, 6850: 35, 6950: 50, 7770: 40, 7850: 50, 7870: 60, 7950: 70, 7970: 80 };
+const AMD_R = { r7260x: 45, r9270: 70, r9270x: 75, r9280: 75, r9280x: 85, r9285: 80, r9290: 105, r9380: 75, r9390: 120 };
+const INTEL_HD = { 3000: 15, 4000: 25, 4600: 35, 5000: 40, 530: 45, 620: 50, 630: 55 };
+
+function gpuPerf(raw) {
+    const s = String(raw).toLowerCase().replace(/[()]/g, " ");
+    let m = s.match(/\b(gtx|rtx|gts|gt|rx)\s*(\d{3,4})(?:\s*(ti|super|xtx|xt|gre))?(?:\s*(ti|super))?/);
+    if (m) {
+        const k = m[1] + m[2];
+        for (const key of [k + (m[3] || "") + (m[4] || ""), k + (m[3] || ""), k]) if (GPUS[key]) return GPUS[key];
+    }
+    if (/radeon/.test(s) && (m = s.match(/hd\s*(\d{4})/))) return AMD_HD[m[1]] ?? 40;
+    if ((m = s.match(/\br([79])\s*(\d{3}x?)/))) return AMD_R["r" + m[1] + m[2]] ?? null;
+    if ((m = s.match(/u?hd\s*(?:graphics)?\s*(\d{3,4})/))) return INTEL_HD[m[1]] ?? 30;
+    if (/iris\s*xe/.test(s)) return 90;
+    if ((m = s.match(/vega\s*(\d+)/))) return m[1] >= 11 ? 90 : 70;
+    if ((m = s.match(/\b(\d{4})\s*(?:gt|gs)\b/)) || (m = s.match(/geforce\s*(\d{4})/))) return OLD_NV[m[1]] ?? null;
+    return null;
+}
+
+function cpuPerf(raw) {
+    const s = String(raw).toLowerCase().replace(/\((r|tm)\)|®|™/g, "");
+    let m;
+    if ((m = s.match(/core\s*ultra\s*([579])/))) return { 5: 300, 7: 380, 9: 450 }[m[1]];
+    if ((m = s.match(/\bi([3579])[-\s]*(\d{3,5})(k|f|kf|x)?/))) {
+        const t = +m[1], n = m[2], gen = n.length === 5 ? +n.slice(0, 2) : n.length === 4 ? +n[0] : 1;
+        const base = { 1: 60, 2: 55, 3: 62, 4: 70, 5: 75, 6: 85, 7: 92, 8: 125, 9: 140, 10: 155, 11: 175, 12: 230, 13: 270, 14: 285 }[gen] ?? 150;
+        const mul = { 3: gen >= 8 ? .8 : .62, 5: 1, 7: 1.25, 9: 1.5 }[t];
+        return Math.round(base * mul * (m[3] === "k" || m[3] === "kf" || m[3] === "x" ? 1.05 : 1));
+    }
+    if ((m = s.match(/core\s*i([3579])\b/))) return { 3: 55, 5: 85, 7: 105, 9: 140 }[m[1]];
+    if ((m = s.match(/core\s*2\s*(duo|quad)/))) return m[1] === "duo" ? 30 : 45;
+    if ((m = s.match(/ryzen\s*([3579])\s*(\d)\d{3}/))) {
+        const base = { 1: 120, 2: 140, 3: 165, 4: 165, 5: 225, 6: 260, 7: 290, 8: 300, 9: 330 }[m[2]];
+        return Math.round(base * { 3: .65, 5: 1, 7: 1.25, 9: 1.55 }[m[1]]);
+    }
+    if ((m = s.match(/\bfx[-\s]*(\d{4})/))) return { 4300: 45, 6300: 60, 8320: 72, 8350: 75, 9590: 85 }[m[1]] ?? 65;
+    if (/phenom/.test(s)) return 45;
+    if (/athlon/.test(s)) return 30;
+    if (/pentium\s*4/.test(s)) return 15;
+    if (/pentium|celeron/.test(s)) return 30;
+    if ((m = s.match(/(\d(?:\.\d+)?)\s*ghz/))) return Math.min(Math.round(m[1] * 15), 60);
+    if (/quad/.test(s)) return 50;
+    if (/dual/.test(s)) return 30;
+    return null;
+}
+
+const perf = (name, kind) => kind === "cpu" ? cpuPerf(name) : gpuPerf(name);
 const score = i => (i ? Number(i.performance ?? (i.vram || 1) * 100) : 0);
 
-function compare(userItem, minName, recName, list) {
-    const mn = find(list, minName), rc = find(list, recName);
-    if (!mn || !rc) return 70;
-    const u = score(userItem);
-    return u >= score(rc) ? 100 : u >= score(mn) ? 70 : 25;
+// "Intel Core i5-2500K or AMD FX-8350" -> either works, so the requirement is the weaker one
+function reqPerf(str, kind) {
+    if (!str) return null;
+    const vals = String(str).split(/\s+or\s+|\s*\/\s*|;|\s+and\s+/i).map(a => perf(a, kind)).filter(v => v != null);
+    return vals.length ? Math.min(...vals) : null;
+}
+
+function compare(user, minStr, recStr, kind) {
+    const u = perf(user.name, kind) ?? score(user);
+    let mn = reqPerf(minStr, kind), rc = reqPerf(recStr, kind);
+    if (mn == null && rc == null) return 70;
+    mn = mn ?? rc * .7;
+    rc = Math.max(rc ?? mn * 1.4, mn);
+    return u >= rc * .95 ? 100 : u >= mn * .95 ? 70 : 25;
 }
 function compareMem(user, min, rec) { return user >= rec ? 100 : user >= min ? 70 : 25; }
 
 function checkGame() {
     const mn = selectedGame.minimum || {}, rc = selectedGame.recommended || {};
-    const cpu = compare(selectedCPU, mn.cpu, rc.cpu, db.cpus);
-    const gpu = compare(selectedGPU, mn.gpu, rc.gpu, db.gpus);
-    const r = compareMem(+$("ram").value, +(mn.ram || 4), +(rc.ram || 8));
-    const v = compareMem(+$("vram").value, +(mn.vram || 1), +(rc.vram || 2));
+    const cpu = compare(selectedCPU, mn.cpu, rc.cpu, "cpu");
+    const gpu = compare(selectedGPU, mn.gpu, rc.gpu, "gpu");
+    const mr = +(mn.ram || 4), mv = +(mn.vram || 1);
+    const r = compareMem(+$("ram").value, mr, +(rc.ram || Math.max(mr, 8)));
+    const v = compareMem(+$("vram").value, mv, +(rc.vram || Math.max(mv, 2)));
     const total = cpu * .3 + gpu * .4 + r * .2 + v * .1;
     showResult(total >= 85 ? "good" : total >= 65 ? "playable" : "bad", total, cpu, gpu, r, v);
 }

@@ -817,5 +817,49 @@
       "vram": 6,
       "storage": 0
     }
+  },
+  {
+    "id": 40,
+    "name": "Fortnite",
+    "year": 2017,
+    "genre": "Battle Royale",
+    "image": "",
+    "source": "manual",
+    "minimum": {
+      "cpu": "Intel Core i3-3225 3.3 GHz",
+      "gpu": "Intel HD 4000",
+      "ram": 8,
+      "vram": 1,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i5-7300U 3.5 GHz",
+      "gpu": "NVIDIA GTX 960 or AMD R9 280",
+      "ram": 16,
+      "vram": 2,
+      "storage": 0
+    }
+  },
+  {
+    "id": 41,
+    "name": "VALORANT",
+    "year": 2020,
+    "genre": "Tactical Shooter",
+    "image": "",
+    "source": "manual",
+    "minimum": {
+      "cpu": "Intel Core 2 Duo E8400",
+      "gpu": "Intel HD 4000",
+      "ram": 4,
+      "vram": 1,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i3-4150",
+      "gpu": "NVIDIA GT 730",
+      "ram": 4,
+      "vram": 1,
+      "storage": 0
+    }
   }
 ]
