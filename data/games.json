@@ -1,0 +1,821 @@
+[
+  {
+    "id": 1,
+    "name": "Grand Theft Auto V",
+    "year": 2015,
+    "genre": "Action",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core 2 Quad Q6600",
+      "gpu": "NVIDIA 9800 GT",
+      "ram": 4,
+      "vram": 1,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i5-3470",
+      "gpu": "NVIDIA GTX 660",
+      "ram": 8,
+      "vram": 2,
+      "storage": 0
+    }
+  },
+  {
+    "id": 2,
+    "name": "Red Dead Redemption 2",
+    "year": 2019,
+    "genre": "Action",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-2500K",
+      "gpu": "NVIDIA GTX 770",
+      "ram": 8,
+      "vram": 2,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-4770K",
+      "gpu": "NVIDIA GTX 1060 6GB",
+      "ram": 12,
+      "vram": 6,
+      "storage": 0
+    }
+  },
+  {
+    "id": 3,
+    "name": "The Witcher 3: Wild Hunt",
+    "year": 2015,
+    "genre": "RPG",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/292030/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-2500K",
+      "gpu": "NVIDIA GTX 660",
+      "ram": 6,
+      "vram": 1,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-3770",
+      "gpu": "NVIDIA GTX 770",
+      "ram": 8,
+      "vram": 2,
+      "storage": 0
+    }
+  },
+  {
+    "id": 4,
+    "name": "Cyberpunk 2077",
+    "year": 2020,
+    "genre": "RPG",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i7-6700",
+      "gpu": "NVIDIA GTX 1060 6GB",
+      "ram": 12,
+      "vram": 6,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-12700",
+      "gpu": "NVIDIA RTX 2060",
+      "ram": 16,
+      "vram": 6,
+      "storage": 0
+    }
+  },
+  {
+    "id": 5,
+    "name": "Elden Ring",
+    "year": 2022,
+    "genre": "RPG",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-8400",
+      "gpu": "NVIDIA GTX 1060 3GB",
+      "ram": 12,
+      "vram": 3,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-8700K",
+      "gpu": "NVIDIA GTX 1070",
+      "ram": 16,
+      "vram": 8,
+      "storage": 0
+    }
+  },
+  {
+    "id": 6,
+    "name": "Hogwarts Legacy",
+    "year": 2023,
+    "genre": "RPG",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/990080/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-6600",
+      "gpu": "NVIDIA GTX 960 4GB",
+      "ram": 16,
+      "vram": 4,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-8700",
+      "gpu": "NVIDIA GTX 1080 Ti",
+      "ram": 16,
+      "vram": 11,
+      "storage": 0
+    }
+  },
+  {
+    "id": 7,
+    "name": "Forza Horizon 5",
+    "year": 2021,
+    "genre": "Racing",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1551360/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-4460",
+      "gpu": "NVIDIA GTX 970",
+      "ram": 8,
+      "vram": 4,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i5-8400",
+      "gpu": "NVIDIA GTX 1070",
+      "ram": 16,
+      "vram": 8,
+      "storage": 0
+    }
+  },
+  {
+    "id": 8,
+    "name": "Forza Horizon 4",
+    "year": 2018,
+    "genre": "Racing",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1293830/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i3-4170",
+      "gpu": "NVIDIA GTX 650 Ti",
+      "ram": 8,
+      "vram": 2,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-3820",
+      "gpu": "NVIDIA GTX 970",
+      "ram": 8,
+      "vram": 4,
+      "storage": 0
+    }
+  },
+  {
+    "id": 9,
+    "name": "Euro Truck Simulator 2",
+    "year": 2012,
+    "genre": "Simulation",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/227300/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core 2 Duo E8200",
+      "gpu": "NVIDIA GTS 450",
+      "ram": 4,
+      "vram": 1,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i5-9600",
+      "gpu": "NVIDIA GTX 1660",
+      "ram": 8,
+      "vram": 6,
+      "storage": 0
+    }
+  },
+  {
+    "id": 10,
+    "name": "Assetto Corsa",
+    "year": 2014,
+    "genre": "Racing",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/244210/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core 2 Duo E6600",
+      "gpu": "NVIDIA GTX 460",
+      "ram": 4,
+      "vram": 1,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i5-4460",
+      "gpu": "NVIDIA GTX 970",
+      "ram": 8,
+      "vram": 4,
+      "storage": 0
+    }
+  },
+  {
+    "id": 11,
+    "name": "BeamNG.drive",
+    "year": 2015,
+    "genre": "Simulation",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/284160/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-8400",
+      "gpu": "NVIDIA GTX 1060",
+      "ram": 16,
+      "vram": 6,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-9700",
+      "gpu": "NVIDIA RTX 2060",
+      "ram": 32,
+      "vram": 6,
+      "storage": 0
+    }
+  },
+  {
+    "id": 12,
+    "name": "PUBG: BATTLEGROUNDS",
+    "year": 2017,
+    "genre": "Battle Royale",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/578080/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-4430",
+      "gpu": "NVIDIA GTX 960",
+      "ram": 8,
+      "vram": 2,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i5-6600K",
+      "gpu": "NVIDIA GTX 1060",
+      "ram": 16,
+      "vram": 6,
+      "storage": 0
+    }
+  },
+  {
+    "id": 13,
+    "name": "Counter-Strike 2",
+    "year": 2023,
+    "genre": "FPS",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/730/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-750",
+      "gpu": "NVIDIA GTX 660",
+      "ram": 8,
+      "vram": 2,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i5-12400",
+      "gpu": "NVIDIA RTX 3060",
+      "ram": 16,
+      "vram": 12,
+      "storage": 0
+    }
+  },
+  {
+    "id": 14,
+    "name": "Dota 2",
+    "year": 2013,
+    "genre": "MOBA",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/570/header.jpg",
+    "minimum": {
+      "cpu": "Intel Dual Core",
+      "gpu": "NVIDIA GeForce 8600 GT",
+      "ram": 4,
+      "vram": 1,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i5-9400",
+      "gpu": "NVIDIA GTX 1060",
+      "ram": 8,
+      "vram": 6,
+      "storage": 0
+    }
+  },
+  {
+    "id": 15,
+    "name": "Team Fortress 2",
+    "year": 2007,
+    "genre": "FPS",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/440/header.jpg",
+    "minimum": {
+      "cpu": "Intel Pentium 4",
+      "gpu": "NVIDIA GeForce 7600",
+      "ram": 2,
+      "vram": 0.5,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i3-6100",
+      "gpu": "NVIDIA GTX 750 Ti",
+      "ram": 8,
+      "vram": 2,
+      "storage": 0
+    }
+  },
+  {
+    "id": 16,
+    "name": "Left 4 Dead 2",
+    "year": 2009,
+    "genre": "FPS",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/550/header.jpg",
+    "minimum": {
+      "cpu": "Pentium 4 3.0GHz",
+      "gpu": "NVIDIA 6600",
+      "ram": 2,
+      "vram": 0.5,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i5-4570",
+      "gpu": "NVIDIA GTX 750",
+      "ram": 8,
+      "vram": 1,
+      "storage": 0
+    }
+  },
+  {
+    "id": 17,
+    "name": "Portal 2",
+    "year": 2011,
+    "genre": "Puzzle",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/620/header.jpg",
+    "minimum": {
+      "cpu": "Intel Pentium 4 3.0GHz",
+      "gpu": "NVIDIA GeForce 7600",
+      "ram": 2,
+      "vram": 0.5,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i5-4570",
+      "gpu": "NVIDIA GTX 750 Ti",
+      "ram": 8,
+      "vram": 2,
+      "storage": 0
+    }
+  },
+  {
+    "id": 18,
+    "name": "Terraria",
+    "year": 2011,
+    "genre": "Adventure",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/105600/header.jpg",
+    "minimum": {
+      "cpu": "2.0 GHz Dual Core",
+      "gpu": "Shader Model 2.0 GPU",
+      "ram": 2,
+      "vram": 0.5,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i3-6100",
+      "gpu": "NVIDIA GTX 750",
+      "ram": 4,
+      "vram": 1,
+      "storage": 0
+    }
+  },
+  {
+    "id": 19,
+    "name": "Stardew Valley",
+    "year": 2016,
+    "genre": "Simulation",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/413150/header.jpg",
+    "minimum": {
+      "cpu": "2 GHz CPU",
+      "gpu": "256MB Video Memory",
+      "ram": 2,
+      "vram": 0.25,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i3",
+      "gpu": "NVIDIA GTX 750",
+      "ram": 4,
+      "vram": 1,
+      "storage": 0
+    }
+  },
+  {
+    "id": 20,
+    "name": "The Elder Scrolls V: Skyrim Special Edition",
+    "year": 2016,
+    "genre": "RPG",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/489830/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-750",
+      "gpu": "NVIDIA GTX 470",
+      "ram": 8,
+      "vram": 1,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i5-2400",
+      "gpu": "NVIDIA GTX 780",
+      "ram": 8,
+      "vram": 3,
+      "storage": 0
+    }
+  },
+  {
+    "id": 21,
+    "name": "Fallout 4",
+    "year": 2015,
+    "genre": "RPG",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/377160/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-2300",
+      "gpu": "NVIDIA GTX 550 Ti",
+      "ram": 8,
+      "vram": 2,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-4790",
+      "gpu": "NVIDIA GTX 780",
+      "ram": 8,
+      "vram": 3,
+      "storage": 0
+    }
+  },
+  {
+    "id": 22,
+    "name": "Far Cry 5",
+    "year": 2018,
+    "genre": "Action",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/552520/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-2400",
+      "gpu": "NVIDIA GTX 670",
+      "ram": 8,
+      "vram": 2,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-4770",
+      "gpu": "NVIDIA GTX 1080",
+      "ram": 16,
+      "vram": 8,
+      "storage": 0
+    }
+  },
+  {
+    "id": 23,
+    "name": "Far Cry 6",
+    "year": 2021,
+    "genre": "Action",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/2369390/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-4460",
+      "gpu": "AMD RX 460",
+      "ram": 8,
+      "vram": 4,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-9700",
+      "gpu": "NVIDIA RTX 2070 Super",
+      "ram": 16,
+      "vram": 8,
+      "storage": 0
+    }
+  },
+  {
+    "id": 24,
+    "name": "Assassin's Creed Odyssey",
+    "year": 2018,
+    "genre": "Action",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/812140/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-2400",
+      "gpu": "NVIDIA GTX 660",
+      "ram": 8,
+      "vram": 2,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-3770",
+      "gpu": "NVIDIA GTX 970",
+      "ram": 16,
+      "vram": 4,
+      "storage": 0
+    }
+  },
+  {
+    "id": 25,
+    "name": "Assassin's Creed Valhalla",
+    "year": 2020,
+    "genre": "Action",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/2208920/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-4460",
+      "gpu": "NVIDIA GTX 960",
+      "ram": 8,
+      "vram": 4,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-6700",
+      "gpu": "NVIDIA GTX 1080",
+      "ram": 16,
+      "vram": 8,
+      "storage": 0
+    }
+  },
+  {
+    "id": 26,
+    "name": "Death Stranding",
+    "year": 2020,
+    "genre": "Action",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1190460/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-3470",
+      "gpu": "NVIDIA GTX 1050 4GB",
+      "ram": 8,
+      "vram": 4,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-3770",
+      "gpu": "NVIDIA GTX 1060 6GB",
+      "ram": 16,
+      "vram": 6,
+      "storage": 0
+    }
+  },
+  {
+    "id": 27,
+    "name": "Horizon Zero Dawn Complete Edition",
+    "year": 2020,
+    "genre": "Action",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1151640/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-2500K",
+      "gpu": "NVIDIA GTX 780",
+      "ram": 8,
+      "vram": 3,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-4770K",
+      "gpu": "NVIDIA GTX 1060",
+      "ram": 16,
+      "vram": 6,
+      "storage": 0
+    }
+  },
+  {
+    "id": 28,
+    "name": "God of War",
+    "year": 2022,
+    "genre": "Action",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1593500/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-2500K",
+      "gpu": "NVIDIA GTX 960",
+      "ram": 8,
+      "vram": 4,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i5-6600K",
+      "gpu": "NVIDIA GTX 1070",
+      "ram": 16,
+      "vram": 8,
+      "storage": 0
+    }
+  },
+  {
+    "id": 29,
+    "name": "Marvel's Spider-Man Remastered",
+    "year": 2022,
+    "genre": "Action",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1817070/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i3-4160",
+      "gpu": "NVIDIA GTX 950",
+      "ram": 8,
+      "vram": 4,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i5-4670",
+      "gpu": "NVIDIA GTX 1060 6GB",
+      "ram": 16,
+      "vram": 6,
+      "storage": 0
+    }
+  },
+  {
+    "id": 30,
+    "name": "Days Gone",
+    "year": 2021,
+    "genre": "Action",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1259420/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-2500K",
+      "gpu": "NVIDIA GTX 780",
+      "ram": 8,
+      "vram": 3,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-4770",
+      "gpu": "NVIDIA GTX 1060 6GB",
+      "ram": 16,
+      "vram": 6,
+      "storage": 0
+    }
+  },
+  {
+    "id": 31,
+    "name": "The Last of Us Part I",
+    "year": 2023,
+    "genre": "Action",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1888930/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i7-4770K",
+      "gpu": "NVIDIA GTX 970",
+      "ram": 16,
+      "vram": 4,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i5-12600K",
+      "gpu": "NVIDIA RTX 2070 Super",
+      "ram": 32,
+      "vram": 8,
+      "storage": 0
+    }
+  },
+  {
+    "id": 32,
+    "name": "Sekiro: Shadows Die Twice",
+    "year": 2019,
+    "genre": "Action",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/814380/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i3-2100",
+      "gpu": "NVIDIA GTX 760",
+      "ram": 4,
+      "vram": 2,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i5-2500K",
+      "gpu": "NVIDIA GTX 970",
+      "ram": 8,
+      "vram": 4,
+      "storage": 0
+    }
+  },
+  {
+    "id": 33,
+    "name": "Monster Hunter: World",
+    "year": 2018,
+    "genre": "Action",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-4460",
+      "gpu": "NVIDIA GTX 760",
+      "ram": 8,
+      "vram": 2,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-3770",
+      "gpu": "NVIDIA GTX 1060",
+      "ram": 8,
+      "vram": 3,
+      "storage": 0
+    }
+  },
+  {
+    "id": 34,
+    "name": "Resident Evil 4",
+    "year": 2023,
+    "genre": "Horror",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/2050650/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-7500",
+      "gpu": "NVIDIA GTX 1050 Ti",
+      "ram": 8,
+      "vram": 4,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-8700",
+      "gpu": "NVIDIA RTX 2070",
+      "ram": 16,
+      "vram": 8,
+      "storage": 0
+    }
+  },
+  {
+    "id": 35,
+    "name": "Resident Evil Village",
+    "year": 2021,
+    "genre": "Horror",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1196590/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-7500",
+      "gpu": "NVIDIA GTX 1050 Ti",
+      "ram": 8,
+      "vram": 4,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-8700",
+      "gpu": "NVIDIA RTX 2070",
+      "ram": 16,
+      "vram": 8,
+      "storage": 0
+    }
+  },
+  {
+    "id": 36,
+    "name": "Grand Theft Auto IV",
+    "year": 2008,
+    "genre": "Action",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/12210/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core 2 Duo 1.8GHz",
+      "gpu": "NVIDIA 7900 256MB",
+      "ram": 1.5,
+      "vram": 0.25,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core 2 Quad Q6600",
+      "gpu": "NVIDIA GTX 660",
+      "ram": 2,
+      "vram": 2,
+      "storage": 0
+    }
+  },
+  {
+    "id": 37,
+    "name": "Max Payne 3",
+    "year": 2012,
+    "genre": "Action",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/204100/header.jpg",
+    "minimum": {
+      "cpu": "Intel Dual Core 2.4GHz",
+      "gpu": "NVIDIA 8600 GT",
+      "ram": 2,
+      "vram": 0.5,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-3930K",
+      "gpu": "NVIDIA GTX 680",
+      "ram": 8,
+      "vram": 2,
+      "storage": 0
+    }
+  },
+  {
+    "id": 38,
+    "name": "Need for Speed: Most Wanted",
+    "year": 2005,
+    "genre": "Racing",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1262560/header.jpg",
+    "minimum": {
+      "cpu": "Intel Pentium 4",
+      "gpu": "NVIDIA GeForce 6600",
+      "ram": 1,
+      "vram": 0.25,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core 2 Duo",
+      "gpu": "NVIDIA GTX 750",
+      "ram": 4,
+      "vram": 1,
+      "storage": 0
+    }
+  },
+  {
+    "id": 39,
+    "name": "Need for Speed Heat",
+    "year": 2019,
+    "genre": "Racing",
+    "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1222680/header.jpg",
+    "minimum": {
+      "cpu": "Intel Core i5-3570",
+      "gpu": "NVIDIA GTX 760",
+      "ram": 8,
+      "vram": 2,
+      "storage": 0
+    },
+    "recommended": {
+      "cpu": "Intel Core i7-4790",
+      "gpu": "NVIDIA GTX 1060",
+      "ram": 16,
+      "vram": 6,
+      "storage": 0
+    }
+  }
+]

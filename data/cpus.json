@@ -1,0 +1,278 @@
+[
+  {
+    "id": 1,
+    "brand": "Intel",
+    "name": "2 GHz CPU",
+    "performance": 25
+  },
+  {
+    "id": 2,
+    "brand": "Intel",
+    "name": "2.0 GHz Dual Core",
+    "performance": 20
+  },
+  {
+    "id": 3,
+    "brand": "Intel",
+    "name": "Intel Core 2 Duo",
+    "performance": 35
+  },
+  {
+    "id": 4,
+    "brand": "Intel",
+    "name": "Intel Core 2 Duo 1.8GHz",
+    "performance": 35
+  },
+  {
+    "id": 5,
+    "brand": "Intel",
+    "name": "Intel Core 2 Duo E6600",
+    "performance": 35
+  },
+  {
+    "id": 6,
+    "brand": "Intel",
+    "name": "Intel Core 2 Duo E8200",
+    "performance": 35
+  },
+  {
+    "id": 7,
+    "brand": "Intel",
+    "name": "Intel Core 2 Quad Q6600",
+    "performance": 45
+  },
+  {
+    "id": 8,
+    "brand": "Intel",
+    "name": "Intel Core i3",
+    "performance": 60
+  },
+  {
+    "id": 9,
+    "brand": "Intel",
+    "name": "Intel Core i3-2100",
+    "performance": 50
+  },
+  {
+    "id": 10,
+    "brand": "Intel",
+    "name": "Intel Core i3-4160",
+    "performance": 50
+  },
+  {
+    "id": 11,
+    "brand": "Intel",
+    "name": "Intel Core i3-4170",
+    "performance": 50
+  },
+  {
+    "id": 12,
+    "brand": "Intel",
+    "name": "Intel Core i3-6100",
+    "performance": 60
+  },
+  {
+    "id": 13,
+    "brand": "Intel",
+    "name": "Intel Core i5-12400",
+    "performance": 145
+  },
+  {
+    "id": 14,
+    "brand": "Intel",
+    "name": "Intel Core i5-12600K",
+    "performance": 145
+  },
+  {
+    "id": 15,
+    "brand": "Intel",
+    "name": "Intel Core i5-2300",
+    "performance": 60
+  },
+  {
+    "id": 16,
+    "brand": "Intel",
+    "name": "Intel Core i5-2400",
+    "performance": 60
+  },
+  {
+    "id": 17,
+    "brand": "Intel",
+    "name": "Intel Core i5-2500K",
+    "performance": 60
+  },
+  {
+    "id": 18,
+    "brand": "Intel",
+    "name": "Intel Core i5-3470",
+    "performance": 65
+  },
+  {
+    "id": 19,
+    "brand": "Intel",
+    "name": "Intel Core i5-3570",
+    "performance": 65
+  },
+  {
+    "id": 20,
+    "brand": "Intel",
+    "name": "Intel Core i5-4430",
+    "performance": 70
+  },
+  {
+    "id": 21,
+    "brand": "Intel",
+    "name": "Intel Core i5-4460",
+    "performance": 70
+  },
+  {
+    "id": 22,
+    "brand": "Intel",
+    "name": "Intel Core i5-4570",
+    "performance": 70
+  },
+  {
+    "id": 23,
+    "brand": "Intel",
+    "name": "Intel Core i5-4670",
+    "performance": 70
+  },
+  {
+    "id": 24,
+    "brand": "Intel",
+    "name": "Intel Core i5-6600",
+    "performance": 78
+  },
+  {
+    "id": 25,
+    "brand": "Intel",
+    "name": "Intel Core i5-6600K",
+    "performance": 78
+  },
+  {
+    "id": 26,
+    "brand": "Intel",
+    "name": "Intel Core i5-750",
+    "performance": 82
+  },
+  {
+    "id": 27,
+    "brand": "Intel",
+    "name": "Intel Core i5-7500",
+    "performance": 82
+  },
+  {
+    "id": 28,
+    "brand": "Intel",
+    "name": "Intel Core i5-8400",
+    "performance": 60
+  },
+  {
+    "id": 29,
+    "brand": "Intel",
+    "name": "Intel Core i5-9400",
+    "performance": 105
+  },
+  {
+    "id": 30,
+    "brand": "Intel",
+    "name": "Intel Core i5-9600",
+    "performance": 105
+  },
+  {
+    "id": 31,
+    "brand": "Intel",
+    "name": "Intel Core i7-12700",
+    "performance": 60
+  },
+  {
+    "id": 32,
+    "brand": "Intel",
+    "name": "Intel Core i7-3770",
+    "performance": 82
+  },
+  {
+    "id": 33,
+    "brand": "Intel",
+    "name": "Intel Core i7-3820",
+    "performance": 82
+  },
+  {
+    "id": 34,
+    "brand": "Intel",
+    "name": "Intel Core i7-3930K",
+    "performance": 82
+  },
+  {
+    "id": 35,
+    "brand": "Intel",
+    "name": "Intel Core i7-4770",
+    "performance": 88
+  },
+  {
+    "id": 36,
+    "brand": "Intel",
+    "name": "Intel Core i7-4770K",
+    "performance": 88
+  },
+  {
+    "id": 37,
+    "brand": "Intel",
+    "name": "Intel Core i7-4790",
+    "performance": 88
+  },
+  {
+    "id": 38,
+    "brand": "Intel",
+    "name": "Intel Core i7-6700",
+    "performance": 95
+  },
+  {
+    "id": 39,
+    "brand": "Intel",
+    "name": "Intel Core i7-8700",
+    "performance": 110
+  },
+  {
+    "id": 40,
+    "brand": "Intel",
+    "name": "Intel Core i7-8700K",
+    "performance": 110
+  },
+  {
+    "id": 41,
+    "brand": "Intel",
+    "name": "Intel Core i7-9700",
+    "performance": 110
+  },
+  {
+    "id": 42,
+    "brand": "Intel",
+    "name": "Intel Dual Core",
+    "performance": 20
+  },
+  {
+    "id": 43,
+    "brand": "Intel",
+    "name": "Intel Dual Core 2.4GHz",
+    "performance": 20
+  },
+  {
+    "id": 44,
+    "brand": "Intel",
+    "name": "Intel Pentium 4",
+    "performance": 20
+  },
+  {
+    "id": 45,
+    "brand": "Intel",
+    "name": "Intel Pentium 4 3.0GHz",
+    "performance": 20
+  },
+  {
+    "id": 46,
+    "brand": "Intel",
+    "name": "Pentium 4 3.0GHz",
+    "performance": 20
+  }
+]

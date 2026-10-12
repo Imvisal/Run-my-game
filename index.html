@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>RunMyGame - PC Game Checker</title>
+    <meta name="theme-color" content="#0b0716">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <!-- IMPORTANT -->
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="bg" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="toast" id="toast"></div>
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="#" class="logo">
+
+            <span class="logo-icon">
+                <i class="fa-solid fa-gamepad"></i>
+            </span>
+
+            <span>
+                Run<span class="purple">MyGame</span>
+            </span>
+
+        </a>
+
+
+        <nav id="navigation">
+
+            <a href="#home">Home</a>
+
+            <a href="#checker">
+                PC Checker
+            </a>
+
+            <a href="#games">
+                Games
+            </a>
+
+        </nav>
+
+
+        <div class="nav-actions">
+
+            <button id="themeBtn">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+
+            <button id="menuBtn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero" id="home">
+
+    <div class="container hero-grid">
+
+        <div class="hero-text">
+
+            <div class="badge">
+                <i class="fa-solid fa-bolt"></i>
+                PC GAME CHECKER
+            </div>
+
+
+            <h1>
+                Can Your PC
+                <span>Run It?</span>
+            </h1>
+
+
+            <p>
+                Find out if your PC can run your
+                favorite games. Select your CPU,
+                GPU and RAM to check compatibility.
+            </p>
+
+
+            <div class="hero-buttons">
+
+                <a
+                    href="#checker"
+                    class="btn primary"
+                >
+                    <i class="fa-solid fa-bolt"></i>
+                    Check My PC
+                </a>
+
+
+                <a
+                    href="#games"
+                    class="btn secondary"
+                >
+                    Browse Games
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- PC CARD -->
+
+        <div class="pc-card">
+
+            <div class="pc-card-header">
+
+                <div>
+
+                    <small>
+                        YOUR GAMING PC
+                    </small>
+
+                    <h3 id="pcStatus">
+                        Not configured
+                    </h3>
+
+                </div>
+
+
+                <span class="online-dot"></span>
+
+            </div>
+
+
+            <div class="pc-specs">
+
+                <div class="pc-spec">
+
+                    <i class="fa-solid fa-microchip"></i>
+
+                    <div>
+
+                        <small>CPU</small>
+
+                        <strong id="heroCPU">
+                            Not set
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="pc-spec">
+
+                    <i class="fa-solid fa-display"></i>
+
+                    <div>
+
+                        <small>GPU</small>
+
+                        <strong id="heroGPU">
+                            Not set
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="pc-spec">
+
+                    <i class="fa-solid fa-memory"></i>
+
+                    <div>
+
+                        <small>RAM</small>
+
+                        <strong id="heroRAM">
+                            8 GB
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="pc-spec">
+
+                    <i class="fa-solid fa-memory"></i>
+
+                    <div>
+
+                        <small>VRAM</small>
+
+                        <strong id="heroVRAM">
+                            2 GB
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= CHECKER ================= -->
+
+<section
+    class="section checker-section"
+    id="checker"
+>
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <span>PC CHECKER</span>
+
+            <h2>
+                Test Your PC
+            </h2>
+
+            <p>
+                Select your CPU, GPU and a game.
+            </p>
+
+        </div>
+
+
+        <div class="checker-grid">
+
+
+            <!-- ================= HARDWARE ================= -->
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <small>
+                            STEP 01
+                        </small>
+
+                        <h3>
+                            Your Hardware
+                        </h3>
+
+                    </div>
+
+                    <i class="fa-solid fa-computer"></i>
+
+                </div>
+
+
+                <!-- CPU -->
+
+                <label>
+                    <i class="fa-solid fa-microchip"></i>
+                    CPU
+                </label>
+
+
+                <div class="search-box">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <input
+                        id="cpuInput"
+                        type="text"
+                        placeholder="Search CPU..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <div
+                    class="results"
+                    id="cpuResults"
+                ></div>
+
+
+                <div
+                    class="selected-item"
+                    id="selectedCPU"
+                >
+                    No CPU selected
+                </div>
+
+
+
+                <!-- GPU -->
+
+                <label>
+                    <i class="fa-solid fa-display"></i>
+                    Graphics Card
+                </label>
+
+
+                <div class="search-box">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <input
+                        id="gpuInput"
+                        type="text"
+                        placeholder="Search graphics card..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <div
+                    class="results"
+                    id="gpuResults"
+                ></div>
+
+
+                <div
+                    class="selected-item"
+                    id="selectedGPU"
+                >
+                    No GPU selected
+                </div>
+
+
+
+                <!-- RAM / VRAM -->
+
+                <div class="two-inputs">
+
+                    <div>
+
+                        <label>
+                            RAM
+                        </label>
+
+                        <select id="ram">
+
+                            <option value="4">
+                                4 GB
+                            </option>
+
+                            <option
+                                value="8"
+                                selected
+                            >
+                                8 GB
+                            </option>
+
+                            <option value="16">
+                                16 GB
+                            </option>
+
+                            <option value="32">
+                                32 GB
+                            </option>
+
+                            <option value="64">
+                                64 GB
+                            </option>
+
+                            <option value="128">
+                                128 GB
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div>
+
+                        <label>
+                            VRAM
+                        </label>
+
+                        <select id="vram">
+
+                            <option value="1">
+                                1 GB
+                            </option>
+
+                            <option
+                                value="2"
+                                selected
+                            >
+                                2 GB
+                            </option>
+
+                            <option value="4">
+                                4 GB
+                            </option>
+
+                            <option value="6">
+                                6 GB
+                            </option>
+
+                            <option value="8">
+                                8 GB
+                            </option>
+
+                            <option value="12">
+                                12 GB
+                            </option>
+
+                            <option value="16">
+                                16 GB
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="save-btn"
+                    id="savePC"
+                >
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Save My PC
+                </button>
+
+            </div>
+
+
+
+            <!-- ================= GAME ================= -->
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <small>
+                            STEP 02
+                        </small>
+
+                        <h3>
+                            Select Game
+                        </h3>
+
+                    </div>
+
+                    <i class="fa-solid fa-gamepad"></i>
+
+                </div>
+
+
+                <label>
+                    <i class="fa-solid fa-gamepad"></i>
+                    Game
+                </label>
+
+
+                <div class="search-box">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <input
+                        id="gameInput"
+                        type="text"
+                        placeholder="Search GTA V, RDR2..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <div
+                    class="results"
+                    id="gameResults"
+                ></div>
+
+
+                <!-- Selected Game -->
+
+                <div
+                    class="game-selected"
+                    id="gameSelected"
+                >
+
+                    <div class="empty-game">
+
+                        <i class="fa-solid fa-gamepad"></i>
+
+                        <p>
+                            Search and select a game
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="check-btn"
+                    id="checkBtn"
+                >
+
+                    <span>
+                        <i class="fa-solid fa-bolt"></i>
+                        CHECK MY PC
+                    </span>
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================= RESULT ================= -->
+
+        <div
+            class="result hidden"
+            id="result"
+        >
+
+            <div
+                class="result-icon"
+                id="resultIcon"
+            >
+                <i class="fa-solid fa-check"></i>
+            </div>
+
+
+            <div class="result-text">
+
+                <small>
+                    RESULT
+                </small>
+
+                <h2 id="resultTitle">
+                    -
+                </h2>
+
+                <p id="resultMessage">
+                    -
+                </p>
+
+            </div>
+
+
+            <div class="fps-box">
+
+                <small>
+                    ESTIMATED
+                </small>
+
+                <strong id="fps">
+                    --
+                </strong>
+
+                <span>
+                    FPS
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================= REQUIREMENTS ================= -->
+
+        <div
+            class="requirements-box hidden"
+            id="requirementsBox"
+        >
+
+            <h3>
+                <i class="fa-solid fa-list-check"></i>
+                Hardware Comparison
+            </h3>
+
+
+            <div id="comparison"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= GAMES ================= -->
+
+<section
+    class="section games-section"
+    id="games"
+>
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <span>GAME DATABASE</span>
+
+            <h2>
+                Find Your Game
+            </h2>
+
+            <p>
+                Search through the RunMyGame database.
+            </p>
+
+        </div>
+
+
+        <div class="library-search">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                id="librarySearch"
+                type="text"
+                placeholder="Search games..."
+            >
+
+        </div>
+
+
+        <div
+            class="games-grid"
+            id="gamesGrid"
+        ></div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= MODAL ================= -->
+
+<div
+    class="modal hidden"
+    id="modal"
+>
+
+    <div
+        class="modal-overlay"
+        id="modalOverlay"
+    ></div>
+
+
+    <div class="modal-card">
+
+        <button
+            class="close-modal"
+            id="closeModal"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+
+        <img
+            id="modalImage"
+            src=""
+            alt="Game"
+        >
+
+
+        <div class="modal-body">
+
+            <span id="modalMeta">
+                PC GAME
+            </span>
+
+
+            <h2 id="modalTitle">
+                Game
+            </h2>
+
+
+            <div class="requirement-grid">
+
+                <div>
+
+                    <h4>
+                        <i class="fa-solid fa-circle-minus"></i>
+                        Minimum
+                    </h4>
+
+                    <p id="minimumText">
+                        -
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <h4>
+                        <i class="fa-solid fa-circle-check"></i>
+                        Recommended
+                    </h4>
+
+                    <p id="recommendedText">
+                        -
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="modal-check"
+                id="modalCheck"
+            >
+                Check This Game
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <div class="container footer-content">
+
+        <div class="footer-logo">
+
+            <i class="fa-solid fa-gamepad"></i>
+
+            RunMyGame
+
+        </div>
+
+
+        <p>
+            © 2026 RunMyGame
+        </p>
+
+    </div>
+
+</footer>
+
+
+
+<!-- IMPORTANT: SCRIPT MUST BE LAST -->
+
+<script src="./script.js"></script>
+
+</body>
+
+</html>
