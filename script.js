@@ -177,7 +177,7 @@ const GPUS = {
     rtx5060: 230, rtx5060ti: 270, rtx5070: 350, rtx5070ti: 450, rtx5080: 520, rtx5090: 700,
     rx460: 50, rx470: 85, rx480: 105, rx560: 55, rx570: 95, rx580: 110, rx590: 125, rx5500xt: 95, rx5600xt: 145, rx5700: 185, rx5700xt: 205,
     rx6500xt: 100, rx6600: 185, rx6600xt: 215, rx6650xt: 225, rx6700xt: 265, rx6800: 340, rx6800xt: 380, rx6900xt: 420,
-    rx7600: 200, rx7600xt: 215, rx7700xt: 290, rx7800xt: 370, rx7900gre: 400, rx7900xt: 480, rx7900xtx: 560, rx9060xt: 260, rx9070: 400, rx9070xt: 470
+    rx7600: 200, rx7600xt: 215, rx7700xt: 290, rx7800xt: 370, rx7900gre: 400, rx7900xt: 480, rx7900xtx: 560, rx9060xt: 260, rx9070: 400, rx9070xt: 470, rx6400: 70, rx550: 35, rx6700: 230, rx6750xt: 280, rx6950xt: 450, rtx4070tisuper: 400, rtx4080super: 440
 };
 const OLD_NV = { 9800: 20, 8800: 25, 8600: 10, 7900: 15, 7600: 12, 6600: 8 };
 const AMD_HD = { 5770: 30, 6850: 35, 6950: 50, 7770: 40, 7850: 50, 7870: 60, 7950: 70, 7970: 80 };
@@ -194,6 +194,8 @@ function gpuPerf(raw) {
     if (/radeon/.test(s) && (m = s.match(/hd\s*(\d{4})/))) return AMD_HD[m[1]] ?? 40;
     if ((m = s.match(/\br([79])\s*(\d{3}x?)/))) return AMD_R["r" + m[1] + m[2]] ?? null;
     if ((m = s.match(/u?hd\s*(?:graphics)?\s*(\d{3,4})/))) return INTEL_HD[m[1]] ?? 30;
+    if ((m = s.match(/arc\s*([ab]\d{3})/))) return { a380: 80, a580: 150, a750: 175, a770: 190, b570: 190, b580: 225 }[m[1]] ?? null;
+    if ((m = s.match(/radeon\s*(\d{3})m\b/))) return { 610: 40, 660: 70, 680: 100, 760: 90, 780: 130, 890: 150 }[m[1]] ?? null;
     if (/iris\s*xe/.test(s)) return 90;
     if ((m = s.match(/vega\s*(\d+)/))) return m[1] >= 11 ? 90 : 70;
     if ((m = s.match(/\b(\d{4})\s*(?:gt|gs)\b/)) || (m = s.match(/geforce\s*(\d{4})/))) return OLD_NV[m[1]] ?? null;
@@ -204,17 +206,21 @@ function cpuPerf(raw) {
     const s = String(raw).toLowerCase().replace(/\((r|tm)\)|®|™/g, "");
     let m;
     if ((m = s.match(/core\s*ultra\s*([579])/))) return { 5: 300, 7: 380, 9: 450 }[m[1]];
-    if ((m = s.match(/\bi([3579])[-\s]*(\d{3,5})(k|f|kf|x)?/))) {
-        const t = +m[1], n = m[2], gen = n.length === 5 ? +n.slice(0, 2) : n.length === 4 ? +n[0] : 1;
+    if ((m = s.match(/\bi([3579])[-\s]*(\d{3,5})(g\d|k|f|kf|x|hx|hk|h|u|p)?/))) {
+        const t = +m[1], n = m[2], sfx = m[3] || "";
+        const gen = n.length === 5 ? +n.slice(0, 2) : n.length === 4 ? (/^g/.test(sfx) ? +n.slice(0, 2) : +n[0]) : 1;
         const base = { 1: 60, 2: 55, 3: 62, 4: 70, 5: 75, 6: 85, 7: 92, 8: 125, 9: 140, 10: 155, 11: 175, 12: 230, 13: 270, 14: 285 }[gen] ?? 150;
         const mul = { 3: gen >= 8 ? .8 : .62, 5: 1, 7: 1.25, 9: 1.5 }[t];
-        return Math.round(base * mul * (m[3] === "k" || m[3] === "kf" || m[3] === "x" ? 1.05 : 1));
+        const f = /^g/.test(sfx) ? .55 : { h: .75, hk: .75, hx: .95, u: .45, p: .6, k: 1.05, kf: 1.05, x: 1.05 }[sfx] ?? 1;
+        return Math.round(base * mul * f);
     }
     if ((m = s.match(/core\s*i([3579])\b/))) return { 3: 55, 5: 85, 7: 105, 9: 140 }[m[1]];
     if ((m = s.match(/core\s*2\s*(duo|quad)/))) return m[1] === "duo" ? 30 : 45;
-    if ((m = s.match(/ryzen\s*([3579])\s*(\d)\d{3}/))) {
+    if ((m = s.match(/ryzen\s*([3579])\s*(\d)\d{3}([a-z0-9]*)/))) {
         const base = { 1: 120, 2: 140, 3: 165, 4: 165, 5: 225, 6: 260, 7: 290, 8: 300, 9: 330 }[m[2]];
-        return Math.round(base * { 3: .65, 5: 1, 7: 1.25, 9: 1.55 }[m[1]]);
+        const x = m[3] || "";
+        const f = /3d/.test(x) ? 1.15 : /^hx/.test(x) ? .95 : /^h/.test(x) ? .8 : /^u/.test(x) ? .5 : 1;
+        return Math.round(base * { 3: .65, 5: 1, 7: 1.25, 9: 1.55 }[m[1]] * f);
     }
     if ((m = s.match(/\bfx[-\s]*(\d{4})/))) return { 4300: 45, 6300: 60, 8320: 72, 8350: 75, 9590: 85 }[m[1]] ?? 65;
     if (/phenom/.test(s)) return 45;

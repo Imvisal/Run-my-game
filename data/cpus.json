@@ -1,278 +1,1454 @@
 [
-  {
-    "id": 1,
-    "brand": "Intel",
-    "name": "2 GHz CPU",
-    "performance": 25
-  },
-  {
-    "id": 2,
-    "brand": "Intel",
-    "name": "2.0 GHz Dual Core",
-    "performance": 20
-  },
-  {
-    "id": 3,
-    "brand": "Intel",
-    "name": "Intel Core 2 Duo",
-    "performance": 35
-  },
-  {
-    "id": 4,
-    "brand": "Intel",
-    "name": "Intel Core 2 Duo 1.8GHz",
-    "performance": 35
-  },
-  {
-    "id": 5,
-    "brand": "Intel",
-    "name": "Intel Core 2 Duo E6600",
-    "performance": 35
-  },
-  {
-    "id": 6,
-    "brand": "Intel",
-    "name": "Intel Core 2 Duo E8200",
-    "performance": 35
-  },
-  {
-    "id": 7,
-    "brand": "Intel",
-    "name": "Intel Core 2 Quad Q6600",
-    "performance": 45
-  },
-  {
-    "id": 8,
-    "brand": "Intel",
-    "name": "Intel Core i3",
-    "performance": 60
-  },
-  {
-    "id": 9,
-    "brand": "Intel",
-    "name": "Intel Core i3-2100",
-    "performance": 50
-  },
-  {
-    "id": 10,
-    "brand": "Intel",
-    "name": "Intel Core i3-4160",
-    "performance": 50
-  },
-  {
-    "id": 11,
-    "brand": "Intel",
-    "name": "Intel Core i3-4170",
-    "performance": 50
-  },
-  {
-    "id": 12,
-    "brand": "Intel",
-    "name": "Intel Core i3-6100",
-    "performance": 60
-  },
-  {
-    "id": 13,
-    "brand": "Intel",
-    "name": "Intel Core i5-12400",
-    "performance": 145
-  },
-  {
-    "id": 14,
-    "brand": "Intel",
-    "name": "Intel Core i5-12600K",
-    "performance": 145
-  },
-  {
-    "id": 15,
-    "brand": "Intel",
-    "name": "Intel Core i5-2300",
-    "performance": 60
-  },
-  {
-    "id": 16,
-    "brand": "Intel",
-    "name": "Intel Core i5-2400",
-    "performance": 60
-  },
-  {
-    "id": 17,
-    "brand": "Intel",
-    "name": "Intel Core i5-2500K",
-    "performance": 60
-  },
-  {
-    "id": 18,
-    "brand": "Intel",
-    "name": "Intel Core i5-3470",
-    "performance": 65
-  },
-  {
-    "id": 19,
-    "brand": "Intel",
-    "name": "Intel Core i5-3570",
-    "performance": 65
-  },
-  {
-    "id": 20,
-    "brand": "Intel",
-    "name": "Intel Core i5-4430",
-    "performance": 70
-  },
-  {
-    "id": 21,
-    "brand": "Intel",
-    "name": "Intel Core i5-4460",
-    "performance": 70
-  },
-  {
-    "id": 22,
-    "brand": "Intel",
-    "name": "Intel Core i5-4570",
-    "performance": 70
-  },
-  {
-    "id": 23,
-    "brand": "Intel",
-    "name": "Intel Core i5-4670",
-    "performance": 70
-  },
-  {
-    "id": 24,
-    "brand": "Intel",
-    "name": "Intel Core i5-6600",
-    "performance": 78
-  },
-  {
-    "id": 25,
-    "brand": "Intel",
-    "name": "Intel Core i5-6600K",
-    "performance": 78
-  },
-  {
-    "id": 26,
-    "brand": "Intel",
-    "name": "Intel Core i5-750",
-    "performance": 82
-  },
-  {
-    "id": 27,
-    "brand": "Intel",
-    "name": "Intel Core i5-7500",
-    "performance": 82
-  },
-  {
-    "id": 28,
-    "brand": "Intel",
-    "name": "Intel Core i5-8400",
-    "performance": 60
-  },
-  {
-    "id": 29,
-    "brand": "Intel",
-    "name": "Intel Core i5-9400",
-    "performance": 105
-  },
-  {
-    "id": 30,
-    "brand": "Intel",
-    "name": "Intel Core i5-9600",
-    "performance": 105
-  },
-  {
-    "id": 31,
-    "brand": "Intel",
-    "name": "Intel Core i7-12700",
-    "performance": 60
-  },
-  {
-    "id": 32,
-    "brand": "Intel",
-    "name": "Intel Core i7-3770",
-    "performance": 82
-  },
-  {
-    "id": 33,
-    "brand": "Intel",
-    "name": "Intel Core i7-3820",
-    "performance": 82
-  },
-  {
-    "id": 34,
-    "brand": "Intel",
-    "name": "Intel Core i7-3930K",
-    "performance": 82
-  },
-  {
-    "id": 35,
-    "brand": "Intel",
-    "name": "Intel Core i7-4770",
-    "performance": 88
-  },
-  {
-    "id": 36,
-    "brand": "Intel",
-    "name": "Intel Core i7-4770K",
-    "performance": 88
-  },
-  {
-    "id": 37,
-    "brand": "Intel",
-    "name": "Intel Core i7-4790",
-    "performance": 88
-  },
-  {
-    "id": 38,
-    "brand": "Intel",
-    "name": "Intel Core i7-6700",
-    "performance": 95
-  },
-  {
-    "id": 39,
-    "brand": "Intel",
-    "name": "Intel Core i7-8700",
-    "performance": 110
-  },
-  {
-    "id": 40,
-    "brand": "Intel",
-    "name": "Intel Core i7-8700K",
-    "performance": 110
-  },
-  {
-    "id": 41,
-    "brand": "Intel",
-    "name": "Intel Core i7-9700",
-    "performance": 110
-  },
-  {
-    "id": 42,
-    "brand": "Intel",
-    "name": "Intel Dual Core",
-    "performance": 20
-  },
-  {
-    "id": 43,
-    "brand": "Intel",
-    "name": "Intel Dual Core 2.4GHz",
-    "performance": 20
-  },
-  {
-    "id": 44,
-    "brand": "Intel",
-    "name": "Intel Pentium 4",
-    "performance": 20
-  },
-  {
-    "id": 45,
-    "brand": "Intel",
-    "name": "Intel Pentium 4 3.0GHz",
-    "performance": 20
-  },
-  {
-    "id": 46,
-    "brand": "Intel",
-    "name": "Pentium 4 3.0GHz",
-    "performance": 20
-  }
+ {
+  "brand": "Intel",
+  "name": "Intel Core 2 Duo E6600",
+  "id": 1,
+  "performance": 30
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core 2 Duo E8400",
+  "id": 2,
+  "performance": 30
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core 2 Quad Q6600",
+  "id": 3,
+  "performance": 45
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core 2 Quad Q9550",
+  "id": 4,
+  "performance": 45
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Pentium 4 3.0GHz",
+  "id": 5,
+  "performance": 15
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-750",
+  "id": 6,
+  "performance": 60
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-920",
+  "id": 7,
+  "performance": 75
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-950",
+  "id": 8,
+  "performance": 75
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-2100",
+  "id": 9,
+  "performance": 34
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-2120",
+  "id": 10,
+  "performance": 34
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-3220",
+  "id": 11,
+  "performance": 38
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-4130",
+  "id": 12,
+  "performance": 43
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-4160",
+  "id": 13,
+  "performance": 43
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-4170",
+  "id": 14,
+  "performance": 43
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-6100",
+  "id": 15,
+  "performance": 53
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-7100",
+  "id": 16,
+  "performance": 57
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-8100",
+  "id": 17,
+  "performance": 100
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-8350K",
+  "id": 18,
+  "performance": 105
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-9100",
+  "id": 19,
+  "performance": 112
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-9100F",
+  "id": 20,
+  "performance": 112
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-10100",
+  "id": 21,
+  "performance": 124
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-10100F",
+  "id": 22,
+  "performance": 124
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-12100",
+  "id": 23,
+  "performance": 184
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-12100F",
+  "id": 24,
+  "performance": 184
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-13100",
+  "id": 25,
+  "performance": 216
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-13100F",
+  "id": 26,
+  "performance": 216
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-14100",
+  "id": 27,
+  "performance": 228
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i3-14100F",
+  "id": 28,
+  "performance": 228
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-2300",
+  "id": 29,
+  "performance": 55
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-2400",
+  "id": 30,
+  "performance": 55
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-2500",
+  "id": 31,
+  "performance": 55
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-2500K",
+  "id": 32,
+  "performance": 58
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-3470",
+  "id": 33,
+  "performance": 62
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-3570",
+  "id": 34,
+  "performance": 62
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-3570K",
+  "id": 35,
+  "performance": 65
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-4430",
+  "id": 36,
+  "performance": 70
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-4460",
+  "id": 37,
+  "performance": 70
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-4570",
+  "id": 38,
+  "performance": 70
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-4590",
+  "id": 39,
+  "performance": 70
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-4670",
+  "id": 40,
+  "performance": 70
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-4690K",
+  "id": 41,
+  "performance": 74
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-6400",
+  "id": 42,
+  "performance": 85
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-6500",
+  "id": 43,
+  "performance": 85
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-6600",
+  "id": 44,
+  "performance": 85
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-6600K",
+  "id": 45,
+  "performance": 89
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-7400",
+  "id": 46,
+  "performance": 92
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-7500",
+  "id": 47,
+  "performance": 92
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-7600",
+  "id": 48,
+  "performance": 92
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-7600K",
+  "id": 49,
+  "performance": 97
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-8400",
+  "id": 50,
+  "performance": 125
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-8600K",
+  "id": 51,
+  "performance": 131
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-9400",
+  "id": 52,
+  "performance": 140
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-9400F",
+  "id": 53,
+  "performance": 140
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-9600K",
+  "id": 54,
+  "performance": 147
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-9600KF",
+  "id": 55,
+  "performance": 147
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-10400",
+  "id": 56,
+  "performance": 155
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-10400F",
+  "id": 57,
+  "performance": 155
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-10600K",
+  "id": 58,
+  "performance": 163
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-10600KF",
+  "id": 59,
+  "performance": 163
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-11400",
+  "id": 60,
+  "performance": 175
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-11400F",
+  "id": 61,
+  "performance": 175
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-11600K",
+  "id": 62,
+  "performance": 184
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-11600KF",
+  "id": 63,
+  "performance": 184
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-12400",
+  "id": 64,
+  "performance": 230
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-12400F",
+  "id": 65,
+  "performance": 230
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-12500",
+  "id": 66,
+  "performance": 230
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-12600",
+  "id": 67,
+  "performance": 230
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-12600K",
+  "id": 68,
+  "performance": 242
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-12600KF",
+  "id": 69,
+  "performance": 242
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-13400",
+  "id": 70,
+  "performance": 270
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-13400F",
+  "id": 71,
+  "performance": 270
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-13500",
+  "id": 72,
+  "performance": 270
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-13600K",
+  "id": 73,
+  "performance": 284
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-13600KF",
+  "id": 74,
+  "performance": 284
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-14400",
+  "id": 75,
+  "performance": 285
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-14400F",
+  "id": 76,
+  "performance": 285
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-14500",
+  "id": 77,
+  "performance": 285
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-14600K",
+  "id": 78,
+  "performance": 299
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-14600KF",
+  "id": 79,
+  "performance": 299
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-2600",
+  "id": 80,
+  "performance": 69
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-2600K",
+  "id": 81,
+  "performance": 72
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-3770",
+  "id": 82,
+  "performance": 78
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-3770K",
+  "id": 83,
+  "performance": 81
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-4770",
+  "id": 84,
+  "performance": 88
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-4770K",
+  "id": 85,
+  "performance": 92
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-4790",
+  "id": 86,
+  "performance": 88
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-4790K",
+  "id": 87,
+  "performance": 92
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-6700",
+  "id": 88,
+  "performance": 106
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-6700K",
+  "id": 89,
+  "performance": 112
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-7700",
+  "id": 90,
+  "performance": 115
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-7700K",
+  "id": 91,
+  "performance": 121
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-8700",
+  "id": 92,
+  "performance": 156
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-8700K",
+  "id": 93,
+  "performance": 164
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-9700",
+  "id": 94,
+  "performance": 175
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-9700K",
+  "id": 95,
+  "performance": 184
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-9700KF",
+  "id": 96,
+  "performance": 184
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-10700",
+  "id": 97,
+  "performance": 194
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-10700F",
+  "id": 98,
+  "performance": 194
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-10700K",
+  "id": 99,
+  "performance": 203
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-10700KF",
+  "id": 100,
+  "performance": 203
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-11700",
+  "id": 101,
+  "performance": 219
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-11700F",
+  "id": 102,
+  "performance": 219
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-11700K",
+  "id": 103,
+  "performance": 230
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-11700KF",
+  "id": 104,
+  "performance": 230
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-12700",
+  "id": 105,
+  "performance": 288
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-12700F",
+  "id": 106,
+  "performance": 288
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-12700K",
+  "id": 107,
+  "performance": 302
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-12700KF",
+  "id": 108,
+  "performance": 302
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-13700",
+  "id": 109,
+  "performance": 338
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-13700F",
+  "id": 110,
+  "performance": 338
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-13700K",
+  "id": 111,
+  "performance": 354
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-13700KF",
+  "id": 112,
+  "performance": 354
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-14700",
+  "id": 113,
+  "performance": 356
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-14700F",
+  "id": 114,
+  "performance": 356
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-14700K",
+  "id": 115,
+  "performance": 374
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-14700KF",
+  "id": 116,
+  "performance": 374
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-9900",
+  "id": 117,
+  "performance": 210
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-9900K",
+  "id": 118,
+  "performance": 221
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-9900KF",
+  "id": 119,
+  "performance": 221
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-10900",
+  "id": 120,
+  "performance": 233
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-10900F",
+  "id": 121,
+  "performance": 233
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-10900K",
+  "id": 122,
+  "performance": 244
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-10900KF",
+  "id": 123,
+  "performance": 244
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-11900",
+  "id": 124,
+  "performance": 263
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-11900K",
+  "id": 125,
+  "performance": 276
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-11900KF",
+  "id": 126,
+  "performance": 276
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-12900",
+  "id": 127,
+  "performance": 345
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-12900F",
+  "id": 128,
+  "performance": 345
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-12900K",
+  "id": 129,
+  "performance": 362
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-12900KF",
+  "id": 130,
+  "performance": 362
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-13900",
+  "id": 131,
+  "performance": 405
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-13900F",
+  "id": 132,
+  "performance": 405
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-13900K",
+  "id": 133,
+  "performance": 425
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-13900KF",
+  "id": 134,
+  "performance": 425
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-14900",
+  "id": 135,
+  "performance": 428
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-14900F",
+  "id": 136,
+  "performance": 428
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-14900K",
+  "id": 137,
+  "performance": 449
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-14900KF",
+  "id": 138,
+  "performance": 449
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core Ultra 5 245K",
+  "id": 139,
+  "performance": 300
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core Ultra 5 245KF",
+  "id": 140,
+  "performance": 300
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core Ultra 7 265K",
+  "id": 141,
+  "performance": 380
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core Ultra 7 265KF",
+  "id": 142,
+  "performance": 380
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core Ultra 9 285K",
+  "id": 143,
+  "performance": 450
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-8250U",
+  "id": 144,
+  "performance": 56
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-8550U",
+  "id": 145,
+  "performance": 70
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-1035G1",
+  "id": 146,
+  "performance": 85
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-1135G7",
+  "id": 147,
+  "performance": 96
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-1165G7",
+  "id": 148,
+  "performance": 120
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-1185G7",
+  "id": 149,
+  "performance": 120
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-10300H",
+  "id": 150,
+  "performance": 116
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-10750H",
+  "id": 151,
+  "performance": 145
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-11400H",
+  "id": 152,
+  "performance": 131
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-11800H",
+  "id": 153,
+  "performance": 164
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-12450H",
+  "id": 154,
+  "performance": 173
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-12500H",
+  "id": 155,
+  "performance": 173
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-12650H",
+  "id": 156,
+  "performance": 216
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-12700H",
+  "id": 157,
+  "performance": 216
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-12900H",
+  "id": 158,
+  "performance": 259
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-13420H",
+  "id": 159,
+  "performance": 203
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i5-13500H",
+  "id": 160,
+  "performance": 203
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-13620H",
+  "id": 161,
+  "performance": 253
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-13700H",
+  "id": 162,
+  "performance": 253
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-13900H",
+  "id": 163,
+  "performance": 304
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-13700HX",
+  "id": 164,
+  "performance": 321
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-13900HX",
+  "id": 165,
+  "performance": 385
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-13980HX",
+  "id": 166,
+  "performance": 385
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i7-14700HX",
+  "id": 167,
+  "performance": 338
+ },
+ {
+  "brand": "Intel",
+  "name": "Intel Core i9-14900HX",
+  "id": 168,
+  "performance": 406
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD FX-4300",
+  "id": 169,
+  "performance": 45
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD FX-6300",
+  "id": 170,
+  "performance": 60
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD FX-8320",
+  "id": 171,
+  "performance": 72
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD FX-8350",
+  "id": 172,
+  "performance": 75
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD FX-9590",
+  "id": 173,
+  "performance": 85
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Phenom II X4 955",
+  "id": 174,
+  "performance": 45
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Athlon II X4 640",
+  "id": 175,
+  "performance": 30
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 3 1200",
+  "id": 176,
+  "performance": 78
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 3 1300X",
+  "id": 177,
+  "performance": 78
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 3 3100",
+  "id": 178,
+  "performance": 107
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 3 3300X",
+  "id": 179,
+  "performance": 107
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 3 4100",
+  "id": 180,
+  "performance": 107
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 1400",
+  "id": 181,
+  "performance": 120
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 1500X",
+  "id": 182,
+  "performance": 120
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 1600",
+  "id": 183,
+  "performance": 120
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 1600X",
+  "id": 184,
+  "performance": 120
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 2600",
+  "id": 185,
+  "performance": 140
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 2600X",
+  "id": 186,
+  "performance": 140
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 3500",
+  "id": 187,
+  "performance": 165
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 3600",
+  "id": 188,
+  "performance": 165
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 3600X",
+  "id": 189,
+  "performance": 165
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 4500",
+  "id": 190,
+  "performance": 165
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 5500",
+  "id": 191,
+  "performance": 225
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 5600",
+  "id": 192,
+  "performance": 225
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 5600G",
+  "id": 193,
+  "performance": 225
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 5600X",
+  "id": 194,
+  "performance": 225
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 5600X3D",
+  "id": 195,
+  "performance": 259
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 7500F",
+  "id": 196,
+  "performance": 290
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 7600",
+  "id": 197,
+  "performance": 290
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 7600X",
+  "id": 198,
+  "performance": 290
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 8400F",
+  "id": 199,
+  "performance": 300
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 9600X",
+  "id": 200,
+  "performance": 330
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 1700",
+  "id": 201,
+  "performance": 150
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 1700X",
+  "id": 202,
+  "performance": 150
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 1800X",
+  "id": 203,
+  "performance": 150
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 2700",
+  "id": 204,
+  "performance": 175
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 2700X",
+  "id": 205,
+  "performance": 175
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 3700X",
+  "id": 206,
+  "performance": 206
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 3800X",
+  "id": 207,
+  "performance": 206
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 5700",
+  "id": 208,
+  "performance": 281
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 5700G",
+  "id": 209,
+  "performance": 281
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 5700X",
+  "id": 210,
+  "performance": 281
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 5700X3D",
+  "id": 211,
+  "performance": 323
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 5800X",
+  "id": 212,
+  "performance": 281
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 5800X3D",
+  "id": 213,
+  "performance": 323
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 7700",
+  "id": 214,
+  "performance": 363
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 7700X",
+  "id": 215,
+  "performance": 363
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 7800X3D",
+  "id": 216,
+  "performance": 417
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 9700X",
+  "id": 217,
+  "performance": 413
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 9800X3D",
+  "id": 218,
+  "performance": 474
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 9 3900X",
+  "id": 219,
+  "performance": 256
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 9 3950X",
+  "id": 220,
+  "performance": 256
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 9 5900X",
+  "id": 221,
+  "performance": 349
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 9 5950X",
+  "id": 222,
+  "performance": 349
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 9 7900",
+  "id": 223,
+  "performance": 450
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 9 7900X",
+  "id": 224,
+  "performance": 450
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 9 7900X3D",
+  "id": 225,
+  "performance": 517
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 9 7950X",
+  "id": 226,
+  "performance": 450
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 9 7950X3D",
+  "id": 227,
+  "performance": 517
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 9 9900X",
+  "id": 228,
+  "performance": 512
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 9 9950X",
+  "id": 229,
+  "performance": 512
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 9 9950X3D",
+  "id": 230,
+  "performance": 588
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 4600H",
+  "id": 231,
+  "performance": 132
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 4800H",
+  "id": 232,
+  "performance": 165
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 5600H",
+  "id": 233,
+  "performance": 180
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 5800H",
+  "id": 234,
+  "performance": 225
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 5500U",
+  "id": 235,
+  "performance": 113
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 5700U",
+  "id": 236,
+  "performance": 141
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 6600H",
+  "id": 237,
+  "performance": 208
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 6800H",
+  "id": 238,
+  "performance": 260
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 5 7640HS",
+  "id": 239,
+  "performance": 232
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 7 7840HS",
+  "id": 240,
+  "performance": 290
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 9 7940HS",
+  "id": 241,
+  "performance": 360
+ },
+ {
+  "brand": "AMD",
+  "name": "AMD Ryzen 9 7945HX",
+  "id": 242,
+  "performance": 427
+ }
 ]
